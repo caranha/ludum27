@@ -34,6 +34,10 @@ public class Oven {
 			return false;
 	}
 	
+	/** 
+	 * Removes the pizza from the oven, and resets its timer. Used to send pizzas to the nex step in their journey
+	 * @return a pointer to the pizza that was in the oven
+	 */
 	public Pizza clear()
 	{
 		Pizza ret = p;

@@ -1,7 +1,6 @@
 package org.castelodelego.ludum27.renderers;
 
 import org.castelodelego.ludum27.Globals;
-import org.castelodelego.ludum27.GraphMap;
 import org.castelodelego.ludum27.gamemodel.GameContext;
 import org.castelodelego.ludum27.gamemodel.PizzaPlace;
 import org.castelodelego.ludum27.gamemodel.Walker;
@@ -26,12 +25,7 @@ public class DebugRenderer {
 		RenderRestaurant(gc.restaurant);
 		RenderMover(gc.getAllMovers());
 	}
-	
-	public void RenderGraphMap (GraphMap m)
-	{
 		
-	}
-	
 	public void RenderMover (Walker m[])
 	{
 		linedrawer.begin(ShapeType.Line);
@@ -74,9 +68,16 @@ public class DebugRenderer {
 			linedrawer.rect(p.ovenList.get(i).pos.x, p.ovenList.get(i).pos.y, PizzaPlace.OVEN_SIZE[0], PizzaPlace.OVEN_SIZE[1]);
 		}
 		
-		
-		
 		// Render Pizza tray (with pizzas!)
+		for (int i = 0; i < PizzaPlace.pizzaTraySize; i++)
+		{
+			linedrawer.setColor(Color.ORANGE);
+			linedrawer.rect(p.pizzaTrayPos.x+(PizzaPlace.TRAY_SIZE[0]*i), p.pizzaTrayPos.y, PizzaPlace.TRAY_SIZE[0], PizzaPlace.TRAY_SIZE[1]);
+			if (p.pizzaTray[i] != null)
+				linedrawer.circle(p.pizzaTrayPos.x+(PizzaPlace.TRAY_SIZE[0]*i)+PizzaPlace.TRAY_SIZE[0]/2, p.pizzaTrayPos.y+PizzaPlace.TRAY_SIZE[1]/2, 10);
+		}
+		
+		
 		
 		linedrawer.end();
 		

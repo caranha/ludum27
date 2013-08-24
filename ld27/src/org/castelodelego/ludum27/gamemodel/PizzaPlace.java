@@ -22,6 +22,7 @@ public class PizzaPlace {
 	public static final int[] INGREDIENT_SIZE = { 60,60 };
 	public static final int[] TABLE_SIZE = { 60,60 };
 	public static final int[] OVEN_SIZE = { 60,100 };
+	public static final int[] TRAY_SIZE = { 60,60 };
 	
 	public Vector2 entrance; // location where the clients enter
 	
@@ -31,8 +32,9 @@ public class PizzaPlace {
 	public Array<Vector2> ingredientPosition; // position of the ingredient tables;
 	public Array<Oven> ovenList;
 
-	
-	// TODO: COMPLETE KITCHEN DATA
+	public Pizza[] pizzaTray;
+	public Vector2 pizzaTrayPos; // position of the Pizza Tray (bottom left);
+	public static final int pizzaTraySize = 5;
 	
 	// KITCHEN: Information about the pizzas waiting	
 
@@ -70,6 +72,9 @@ public class PizzaPlace {
 		ovenList = new Array<Oven>();
 		ovenList.add(new Oven(new Vector2(400,680)));
 		
+		pizzaTray = new Pizza[pizzaTraySize]; // it starts all null;
+		pizzaTrayPos = new Vector2(100,460);
+		
 		reset();
 	}
 	
@@ -96,8 +101,8 @@ public class PizzaPlace {
 		for (int i = 0; i < ovenList.size; i++)
 			ovenList.get(i).clear();
 		
-		// TODO: Finish Restaurant Reset
-		// Clear pizza waiting place
+		// Clear pizza tray
+		
 		
 	}
 	
@@ -105,10 +110,29 @@ public class PizzaPlace {
 	{
 		for (int i = 0; i < ovenList.size; i++)
 		{
-			if (ovenList.get(i).update(dt)); // Pizza is done, try to put it on the tray
+			if (ovenList.get(i).update(dt)) // Pizza is done, try to put it on the tray
+			{
+				int place = findTraySpace();
+				if (place != -1)
+					pizzaTray[place] = ovenList.get(i).clear();
+			}
 		}
 	}
 
+	/**
+	 * Looks for an empty space on the tray. If found, return its index. If not found, return -1;
+	 * @return
+	 */
+	public int findTraySpace()
+	{
+		for (int i = 0; i < pizzaTraySize; i++)
+			if (pizzaTray[i] == null)
+				return i;
+		return -1;
+	}
+	
+	
+	
 	/**
 	 * Gets the index of a random, empty table. If no tables are empty, returns -1;
 	 * @return
@@ -264,6 +288,21 @@ public class PizzaPlace {
 		for (int i = 0; i < ovenList.size; i++)
 		{
 			Rectangle rect = new Rectangle(ovenList.get(i).pos.x,ovenList.get(i).pos.y,OVEN_SIZE[0],OVEN_SIZE[1]);
+			if (rect.contains(firstTouch))
+				return i;
+		}
+		return -1;
+	}
+	
+	/**
+	 * Returns an index to the tray that is touched in this position, or -1 if no oven is touched in this position.
+	 * @param firstTouch
+	 * @return
+	 */
+	public int getTrayIndex(Vector2 firstTouch) {
+		for (int i = 0; i < ovenList.size; i++)
+		{
+			Rectangle rect = new Rectangle(pizzaTrayPos.x+TRAY_SIZE[0]*i,pizzaTrayPos.y,TRAY_SIZE[0],TRAY_SIZE[1]);
 			if (rect.contains(firstTouch))
 				return i;
 		}
