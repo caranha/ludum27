@@ -1,7 +1,5 @@
 package org.castelodelego.ludum27.gamemodel;
 
-import java.util.ArrayList;
-
 import org.castelodelego.ludum27.Globals;
 
 import com.badlogic.gdx.Gdx;
@@ -20,8 +18,6 @@ public class Client extends Walker{
 	private float waiting_time = 10; // THEME! 10 SECONDS! WOW!
 	private float eating_time = 3;
 	
-	private ArrayList<Vector2> move_goals; // list of movement goals
-	
 	public Client(int variety, int quantity, int pizzaN) {
 		super(new Vector2(0,0));
 
@@ -30,7 +26,7 @@ public class Client extends Walker{
 		order = new Pizza[npizza];
 		satisfied = new boolean[npizza];
 		state = ClientState.IN_LINE;
-		move_goals = new ArrayList<Vector2>();
+
 		tableGoal = -1;
 		speed = 40;
 		
@@ -61,21 +57,11 @@ public class Client extends Walker{
 			
 		case GO_SEAT: // The client is already inside the restaurant, but not yet seated at the table;
 			
-			if (getpos().dst(move_goals.get(0).x,move_goals.get(0).y) <= this.speed*dt) // next goal was reached
-			{
-				move_goals.remove(0);
-			}			
-			
-			if (move_goals.isEmpty()) // Table was reached
+			if (!move(dt)) // Table was reached
 			{
 				state = ClientState.WAIT_FOOD;
 				setpos(Globals.gc.restaurant.tableLocation.get(tableGoal));
-			}
-			else
-			{
-				setdir(move_goals.get(0).cpy().sub(getpos())); // there are still more goals, move.
-				move(dt);
-			}
+			}			
 			break;
 			
 		case WAIT_FOOD:
@@ -91,25 +77,15 @@ public class Client extends Walker{
 			if (eating_time < 0)
 			{
 				state = ClientState.GO_LEAVE; // eating is done, change to the last state
-				move_goals.addAll(Globals.gc.restaurant.getClientPathFromTable(tableGoal)); // get the moving goals
+				setGoals(Globals.gc.restaurant.getClientPathFromTable(tableGoal)); // get the moving goals
 				Globals.gc.restaurant.releaseTable(tableGoal); // clear the table
 			}
 			break;
 		
 		case GO_LEAVE:
-			if (getpos().dst(move_goals.get(0).x,move_goals.get(0).y) <= this.speed*dt) // next goal was reached
+			if (!move(dt))
 			{
-				move_goals.remove(0);
-			}			
-			
-			if (move_goals.isEmpty()) // Exit was reached
-			{
-				ret = true; // This client can be removed
-			}
-			else
-			{
-				setdir(move_goals.get(0).cpy().sub(getpos())); // there are still more goals, move.
-				move(dt);
+				ret = true;
 			}			
 			break;
 	
@@ -137,7 +113,7 @@ public class Client extends Walker{
 		Globals.gc.restaurant.sitAtTable(table,this);
 
 
-		move_goals.addAll(Globals.gc.restaurant.getClientPathToTable(table));
+		setGoals(Globals.gc.restaurant.getClientPathToTable(table));
 	}
 
 	/**

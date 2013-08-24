@@ -1,5 +1,6 @@
 package org.castelodelego.ludum27.gamemodel;
 
+import org.castelodelego.ludum27.DiffParam;
 import org.castelodelego.ludum27.Globals;
 import org.castelodelego.ludum27.gamemodel.Client.ClientState;
 
@@ -26,14 +27,14 @@ public class GameContext {
 	 * Pizzas for next difficulty
 	 */
 	
-	// TODO: choose a better way to define client frequency
-	static final int[][] diffparams = {
-		{1, 3, 1, 1, 240, 20} // Difficulty 0: 
-	};
+	DiffParam[] diff;
+	
 	enum GameState { PREPARING, RUNNING, BREAK, GAMEOVER };
 	
 	
 	int score; // score for this game session
+	int totalServed;
+	
 	int difficulty; // used to calculate level progression parameters.
 	GameState gs;
 	
@@ -44,12 +45,20 @@ public class GameContext {
 	Bronks cook;
 	Beet server;
 	
+	
+	/** 
+	 * New game context should only need to be called once 
+	 */
 	public GameContext()
 	{		
 		restaurant = new PizzaPlace();
 		clientlist = new Array<Client>();
-		cook = new Bronks(new Vector2(300,650));
+		cook = new Bronks();
 		server = new Beet(new Vector2(300,600));
+		
+		diff = new DiffParam[1];
+		diff[0] = new DiffParam(3, 1, 1, 6, 240, 10);
+		
 	}
 	
 	/**
@@ -58,6 +67,8 @@ public class GameContext {
 	public void reset()
 	{
 		score = 0;
+		totalServed = 0;
+		
 		difficulty = 0;
 		gs = GameState.PREPARING;
 		
@@ -87,8 +98,8 @@ public class GameContext {
 			// Run update on robots
 			
 			// test if we need more clients
-			if (Globals.dice.nextFloat() < (1.0f/diffparams[difficulty][4])) // Mean Time To Happen for clients			
-				clientlist.add(new Client(diffparams[difficulty][1], diffparams[difficulty][2], diffparams[difficulty][3]));
+			if (clientlist.size < diff[difficulty].clientMax && Globals.dice.nextFloat() < (1.0f/diff[difficulty].clientFreq))					
+				clientlist.add(new Client(diff[difficulty].variety,diff[difficulty].quantity,diff[difficulty].pizzaN));
 			
 			// Run update on clients
 			for(int i = 0; i < clientlist.size; i++)
