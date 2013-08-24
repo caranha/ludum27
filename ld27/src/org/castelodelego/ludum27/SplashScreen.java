@@ -17,7 +17,6 @@ public class SplashScreen implements Screen {
 	// Variables for drawing the splash screen
 	OrthographicCamera camera;
 	ShapeRenderer lineDrawer;
-	SpriteBatch batch;
 	Texture splashimg;	
 	float time;
 	float fade;
@@ -43,8 +42,6 @@ public class SplashScreen implements Screen {
 		else
 			splashimg = new Texture(Gdx.files.internal("images/backgrounds/splash_hor.png")); 
 		fade = 0;
-		
-		batch = GdxGameMain.getBatch();
 	}
 	
 	
@@ -56,7 +53,7 @@ public class SplashScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		// Set loading progress variables
-		loaddone = GdxGameMain.manager.update(); // true if all loading is finished	
+		loaddone = Globals.manager.update(); // true if all loading is finished	
 		//	loadprogress = GdxGameMain.manager.getProgress(); // 0-1 loading progress, if I need a loading bar
 		
 		// load animations
@@ -77,10 +74,10 @@ public class SplashScreen implements Screen {
 			fade = fade - delta*3;
 		}
 		
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		batch.draw(splashimg, 0,0);
-		batch.end();
+		Globals.batch.setProjectionMatrix(camera.combined);
+		Globals.batch.begin();
+		Globals.batch.draw(splashimg, 0,0);
+		Globals.batch.end();
 		
 		
 		// Drawing Fade

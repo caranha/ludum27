@@ -12,21 +12,24 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GdxGameMain extends Game {
 
-	static int SCREEN_NUMBER = 2;
+	static int SCREEN_NUMBER = 5;
+	
 	static int SCREEN_SPLASH = 0;
 	static int SCREEN_MAIN = 1;
+	static int SCREEN_PLAY = 2;
+	static int SCREEN_GAMEOVER = 3;
+	static int SCREEN_BREAK = 4;
 	
 	static Screen[] screenlist;
 
-	public static AssetManager manager;
-	public static AnimationManager animman;
+	
 	
 	static int nextscreen;
 	static boolean changescreen;
 	
 	// Debug text display
 	BitmapFont debugtext;
-	public static SpriteBatch batch;
+	
 	
 	@Override
 	public void create() {		
@@ -34,15 +37,22 @@ public class GdxGameMain extends Game {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		
 		debugtext = new BitmapFont();
-		batch = new SpriteBatch();
+
+		Globals.init();
 		
 		// Creating global resource managers
 		queueAssets();
-		animman = new AnimationManager();
+		
 		
 		screenlist = new Screen[SCREEN_NUMBER];
+		
 		screenlist[SCREEN_SPLASH] = new SplashScreen(SCREEN_SPLASH);
 		screenlist[SCREEN_MAIN] = new MainScreen();
+		screenlist[SCREEN_PLAY] = new PizzaScreen();
+		screenlist[SCREEN_GAMEOVER] = new GameOverScreen();
+		screenlist[SCREEN_BREAK] = new BreakScreen();
+		
+		
 		setScreen(screenlist[SCREEN_SPLASH]);
 		nextscreen = SCREEN_SPLASH;
 		changescreen = false;
@@ -65,6 +75,7 @@ public class GdxGameMain extends Game {
 		{
 			changescreen = false;
 			setScreen(screenlist[nextscreen]);
+			Gdx.app.debug("Change Screen", nextscreen+"");
 		}
 		
 		super.render();
@@ -73,10 +84,10 @@ public class GdxGameMain extends Game {
 		// Rendering here renders above everything else
 		// Good for rendering debug info
 		// TODO: Test if we are in debug mode
-		batch.begin();
+		Globals.batch.begin();
 		debugtext.setColor(Color.YELLOW);
-		debugtext.draw(batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 795);		
-		batch.end();
+		debugtext.draw(Globals.batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 795);		
+		Globals.batch.end();
 		
 	}
 
@@ -87,8 +98,6 @@ public class GdxGameMain extends Game {
 	 */
 	private void queueAssets()
 	{
-		manager = new AssetManager();
-		
 		// manager.load("images-packed/pack.atlas", TextureAtlas.class); // packed images
 	}
 	
@@ -114,14 +123,6 @@ public class GdxGameMain extends Game {
 		return screenlist[index];
 	}
 	
-	/**
-	 * Gets the static spritebatch for this game
-	 * @return
-	 */
-	public static SpriteBatch getBatch()
-	{
-		return batch;
-	}
 	
 	/*
 	 * The methods below are super-methods for Game. I can override 
