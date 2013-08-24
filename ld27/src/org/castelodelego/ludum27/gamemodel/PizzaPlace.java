@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -18,18 +19,21 @@ import com.badlogic.gdx.utils.Array;
 
 public class PizzaPlace {
 
-
+	public static final int[] INGREDIENT_SIZE = { 60,60 };
+	public static final int[] TABLE_SIZE = { 60,60 };
+	public static final int[] OVEN_SIZE = { 60,100 };
 	
 	public Vector2 entrance; // location where the clients enter
 	
 	public Array<Vector2> tableLocation; // the location of all tables in the pizza place
 	public Client[] tableOccupied; // whether the table is occupied or not by a client
 	
+	public Array<Vector2> ingredientPosition; // position of the ingredient tables;
+	public Array<Oven> ovenList;
+
 	
 	// TODO: COMPLETE KITCHEN DATA
 	
-	// KITCHEN: Information ingredients
-	// KITCHEN: Information about ovens
 	// KITCHEN: Information about the pizzas waiting	
 
 	
@@ -41,6 +45,7 @@ public class PizzaPlace {
 	{
 		entrance = new Vector2(20,80);
 		
+		// TABLE LOCATIONS
 		tableLocation = new Array<Vector2>();
 		tableLocation.add(new Vector2(150,150));
 		tableLocation.add(new Vector2(250,150));
@@ -50,22 +55,58 @@ public class PizzaPlace {
 		tableLocation.add(new Vector2(350,250));
 		tableOccupied = new Client[tableLocation.size];
 		
+		// INGREDIENT LOCATIONS
+		ingredientPosition = new Array<Vector2>();
+		ingredientPosition.add(new Vector2(20,720));
+		ingredientPosition.add(new Vector2(80,720));
+		ingredientPosition.add(new Vector2(140,720));
+		ingredientPosition.add(new Vector2(200,720));
+		ingredientPosition.add(new Vector2(20,640));
+		ingredientPosition.add(new Vector2(80,640));
+		ingredientPosition.add(new Vector2(140,640));
+		ingredientPosition.add(new Vector2(200,640));
+
+		// OVEN LOCATIONS
+		ovenList = new Array<Oven>();
+		ovenList.add(new Oven(new Vector2(400,680)));
+		
 		reset();
 	}
 	
 	/**
-	 * Clears the restaurant to its pre-game state
+	 * Re-start the restaurant to its pre-game state (CLEARS POWER UPS)
 	 */
 	public void reset() {
+		
+		clear();
+		ovenList.clear();
+		ovenList.add(new Oven(new Vector2(400,680)));
+	}
+	
+	/**
+	 * Clears the restaurant to its pre-game state (does not clear power ups)
+	 */
+	public void clear() {
 		
 		// Clear tables
 		for (int i = 0; i < tableOccupied.length; i++)
 			releaseTable(i);
-
-		// TODO: Finish Restaurant Reset
+		
 		// Clear ovens
+		for (int i = 0; i < ovenList.size; i++)
+			ovenList.get(i).clear();
+		
+		// TODO: Finish Restaurant Reset
 		// Clear pizza waiting place
 		
+	}
+	
+	public void update(float dt)
+	{
+		for (int i = 0; i < ovenList.size; i++)
+		{
+			if (ovenList.get(i).update(dt)); // Pizza is done, try to put it on the tray
+		}
 	}
 
 	/**
@@ -146,6 +187,87 @@ public class PizzaPlace {
 		tableOccupied[tableGoal] = null;
 	}
 
+	/**
+	 * Tries to put a pizza in the oven. Returns false if fails.
+	 * @param i -- oven number
+	 * @param currentPizza -- pizza to be put in the oven. Values will be copied
+	 * @return Returns false if oven number is invalid, or oven is full.
+	 */
+	public boolean useOven(int i, Pizza currentPizza) {
+		if (i < ovenList.size && !ovenList.get(i).hasPizza())
+		{
+			ovenList.get(i).putPizza(currentPizza);
+			return true;
+		}
+		else				
+			return false;
+	}
 
+	public Collection<? extends Vector2> getCookPath(int[] prevOrder,
+			int[] nextOrder) {
+		ArrayList<Vector2> ret = new ArrayList<Vector2>();
+		// TODO Improve the Route generation Algorithm
+		
+		ret.add(getKitchenPos(prevOrder));
+		ret.add(getKitchenPos(nextOrder));
+		
+		return ret;
+	}
+
+	
+	
+	
+	public Vector2 getKitchenPos(int[] lastOrder) {
+		if (lastOrder[0] == Bronks.ACTION_INGREDIENT)
+			return getIngredientPosition(lastOrder[1]);
+		else
+			return getOvenPosition(lastOrder[1]);
+	}
+
+	public Vector2 getIngredientPosition(int i)
+	{
+		if (i < ingredientPosition.size)
+			return ingredientPosition.get(i);
+		else
+			return null;
+	}
+	
+	public Vector2 getOvenPosition(int i)
+	{
+		if (i < ovenList.size)
+			return ovenList.get(i).pos;
+		else
+			return null;
+	}
+
+	/**
+	 * Returns an index to the ingredient that is touched in this position, or -1 if no ingredient is touched in this position.
+	 * @param firstTouch
+	 * @return
+	 */
+	public int getIngredientIndex(Vector2 firstTouch) {
+		for (int i = 0; i < ingredientPosition.size; i++)
+		{
+			Rectangle rect = new Rectangle(ingredientPosition.get(i).x,ingredientPosition.get(i).y,INGREDIENT_SIZE[0],INGREDIENT_SIZE[1]);
+			if (rect.contains(firstTouch))
+				return i;
+		}
+		return -1;
+	}
+
+	/**
+	 * Returns an index to the oven that is touched in this position, or -1 if no oven is touched in this position.
+	 * @param firstTouch
+	 * @return
+	 */
+	public int getOvenIndex(Vector2 firstTouch) {
+		for (int i = 0; i < ovenList.size; i++)
+		{
+			Rectangle rect = new Rectangle(ovenList.get(i).pos.x,ovenList.get(i).pos.y,OVEN_SIZE[0],OVEN_SIZE[1]);
+			if (rect.contains(firstTouch))
+				return i;
+		}
+		return -1;
+	}
 	
 }

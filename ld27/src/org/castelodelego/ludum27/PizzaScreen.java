@@ -1,12 +1,12 @@
 package org.castelodelego.ludum27;
 
+import org.castelodelego.ludum27.gamemodel.Bronks;
 import org.castelodelego.ludum27.renderers.DebugRenderer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -17,10 +17,12 @@ import com.badlogic.gdx.math.Vector2;
 public class PizzaScreen implements Screen, InputProcessor {
 
 	DebugRenderer drender;
+	Vector2 firstTouch;
 	
 	public PizzaScreen()
 	{
 		drender = new DebugRenderer();
+		firstTouch = new Vector2();
 	}
 	
 	
@@ -87,20 +89,54 @@ public class PizzaScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		Gdx.app.log("Down", screenX+" "+screenY);
+		screenY = Gdx.app.getGraphics().getHeight() - screenY;
+		firstTouch.set(screenX,screenY);
 		return true;
 	}
 
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		Gdx.app.log("Up", screenX+" "+screenY);
-		return true;
+		screenY = Gdx.app.getGraphics().getHeight() - screenY;
+		
+		Vector2 newTouch = new Vector2(screenX, screenY);
+		int target;
+		
+		// TODO: Test if we are dismissing the "Show Pizza" screen
+		
+		// Test if we are touching an ingredient
+		target = Globals.gc.restaurant.getIngredientIndex(firstTouch);
+		if (target != -1 && target == Globals.gc.restaurant.getIngredientIndex(newTouch))
+		{
+			Gdx.app.debug("Interface", "Touched Ingredient "+target);
+			Globals.gc.sendCookCommand(Bronks.ACTION_INGREDIENT, target);
+			return true;
+		}
+		
+		// Test if we are touching an oven
+		target = Globals.gc.restaurant.getOvenIndex(firstTouch);
+		if (target != -1 && target == Globals.gc.restaurant.getOvenIndex(newTouch))
+		{
+			Gdx.app.debug("Interface", "Touched Oven "+target);
+			Globals.gc.sendCookCommand(Bronks.ACTION_OVEN, target);
+			return true;
+		}
+		
+		
+		
+		
+		// TODO: Test if we are touching a pizza array (tap/drag)
+		// TODO: Test if we are touching a client
+		
+		
+		return false;
 	}
 
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		screenY = Gdx.app.getGraphics().getHeight() - screenY;
+		
 		Gdx.app.log("Dragged", screenX+" "+screenY);
 		return true;
 	}

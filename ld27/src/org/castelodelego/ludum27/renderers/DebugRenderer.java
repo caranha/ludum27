@@ -54,11 +54,28 @@ public class DebugRenderer {
 		linedrawer.setColor(Color.BLUE);
 		for (int i = 0; i < p.tableLocation.size; i++)
 		{
-			linedrawer.rect(p.tableLocation.get(i).x, p.tableLocation.get(i).y, 60, 60);
+			linedrawer.rect(p.tableLocation.get(i).x, p.tableLocation.get(i).y, PizzaPlace.TABLE_SIZE[0], PizzaPlace.TABLE_SIZE[1]);
 		}
 
 		// Render Ingredient tables
+		linedrawer.setColor(Color.RED);
+		for (int i = 0; i < p.ingredientPosition.size; i++)
+		{
+			linedrawer.rect(p.ingredientPosition.get(i).x,p. ingredientPosition.get(i).y, PizzaPlace.INGREDIENT_SIZE[0], PizzaPlace.INGREDIENT_SIZE[1]);
+		}
+		
 		// Render Oven
+		for (int i = 0; i < p.ovenList.size; i++)
+		{
+			if (p.ovenList.get(i).hasPizza())
+				linedrawer.setColor(Color.WHITE);
+			else
+				linedrawer.setColor(Color.GRAY);
+			linedrawer.rect(p.ovenList.get(i).pos.x, p.ovenList.get(i).pos.y, PizzaPlace.OVEN_SIZE[0], PizzaPlace.OVEN_SIZE[1]);
+		}
+		
+		
+		
 		// Render Pizza tray (with pizzas!)
 		
 		linedrawer.end();

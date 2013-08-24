@@ -2,6 +2,7 @@ package org.castelodelego.ludum27.gamemodel;
 
 import java.util.ArrayList;
 
+import org.castelodelego.ludum27.Globals;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -11,36 +12,96 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Bronks extends Walker{
 
-	public static int ACTION_INGREDIENT = 0;
-	public static int ACTION_OVEN = 1;
+	public final static int ACTION_INGREDIENT = 0;
+	public final static int ACTION_OVEN = 1;
 	
-	Pizza currentPizza;
-	ArrayList<Integer[]> orders;
-	private ArrayList<Vector2> move_goals;
-	
+	public Pizza currentPizza;
+	ArrayList<int[]> orders;
+	int[] lastOrder;
+	float cooldown;
 	
 	public Bronks() {
 		super(new Vector2());
 		
+		speed = 60;
+		
 		currentPizza = new Pizza();
-		orders = new ArrayList<Integer[]>();
-		move_goals = new ArrayList<Vector2>();
+		orders = new ArrayList<int[]>();
+
+		// Cooking Robot starts at the Oven
+		lastOrder = new int[2];
+		lastOrder[0] = ACTION_OVEN;
+		lastOrder[1] = 0;		
+		cooldown = 0;
 	}
 
 	/**
-	 * Reset the robot to its initial position
+	 * Reset the robot to its pre-game values
 	 */
 	public void reset()
 	{
-		move_goals.clear();
-		currentPizza.clear();
-		
+		clear();
+		speed = 60;
 	}
+	
+	/**
+	 * Clears the robot position, but does not remove power ups.
+	 */
+	public void clear() {
+		resetGoals();
+		currentPizza.clear();
+		lastOrder[0] = ACTION_OVEN;
+		lastOrder[1] = 0;
+		setpos(Globals.gc.restaurant.getKitchenPos(lastOrder));		
+		cooldown = 0;
+	}
+
 	
 	
 	public void addOrder(int ordertype, int orderindex)
 	{
+		int[] order = new int[2];
+		order[0] = ordertype;
+		order[1] = orderindex;
+		orders.add(order);
 		
+		if (orders.size() == 1) // if there are no orders, we need to queue movement
+			setGoals(Globals.gc.restaurant.getCookPath(lastOrder, order));
 	}
+	
+	public void update(float dt)
+	{
+		if (cooldown > 0)
+		{
+			cooldown -= dt; // TODO: adjust cooldown to perform action animation
+			return;
+		}
+			
+		if (orders.isEmpty()) // no orders, do nothing
+			return;
+		
+		if (!move(dt)) // if we have nowhere to move, it is time to execute the order
+		{
+			lastOrder = orders.get(0);
+			orders.remove(0); // clear the current order;
+			setpos(Globals.gc.restaurant.getKitchenPos(lastOrder));
+			
+			switch(lastOrder[0])
+			{
+			case ACTION_INGREDIENT:
+				currentPizza.addIngredient(lastOrder[1]);
+				break;
+			case ACTION_OVEN:
+				if (Globals.gc.restaurant.useOven(lastOrder[1],currentPizza)) 
+					currentPizza.clear(); // true, can put the pizza in the Oven
+				else
+					orders.clear(); // failed to put pizza in oven; cancel all further orders					
+			}
+			
+			if (!orders.isEmpty()) // if we still have orders queued, add movement goals
+				setGoals(Globals.gc.restaurant.getCookPath(lastOrder, orders.get(0)));
+		}
+	}
+
 	
 }

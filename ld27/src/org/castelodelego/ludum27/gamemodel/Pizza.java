@@ -2,6 +2,8 @@ package org.castelodelego.ludum27.gamemodel;
 
 import org.castelodelego.ludum27.Globals;
 
+import com.badlogic.gdx.Gdx;
+
 public class Pizza {
 
 	public static final int SIZE = 8;
@@ -47,6 +49,11 @@ public class Pizza {
 	
 	public void addIngredient(int i)
 	{
+		if (i >= SIZE)
+		{
+			Gdx.app.error("Pizza.addIngredient", "Requested an igredient out of bonds: "+i);
+			return;
+		}
 		ingredients[i]++;
 	}
 	
@@ -70,5 +77,13 @@ public class Pizza {
 			ingredients[i] = 0;
 	}
 	
-	
+	/**
+	 * Copy a pizza into this one
+	 * You wouldn't download a pizza
+	 */
+	public void copy(Pizza p)
+	{
+		for (int i = 0; i < SIZE; i++)
+			ingredients[i] = p.ingredients[i];
+	}
 }

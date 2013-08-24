@@ -57,7 +57,7 @@ public class GameContext {
 		server = new Beet(new Vector2(300,600));
 		
 		diff = new DiffParam[1];
-		diff[0] = new DiffParam(3, 1, 1, 6, 240, 10);
+		diff[0] = new DiffParam(3, 1, 1, 3, 240, 10);
 		
 	}
 	
@@ -74,6 +74,19 @@ public class GameContext {
 		
 		restaurant.reset();
 		clientlist.clear();
+		cook.reset();
+	}
+	
+	/**
+	 * Clears the game state for a new day (does not reset power ups)
+	 */
+	public void clear()
+	{
+		gs = GameState.PREPARING;
+		restaurant.clear();
+		clientlist.clear();
+		cook.clear();
+		
 	}
 	
 	public void run()
@@ -96,6 +109,7 @@ public class GameContext {
 		case RUNNING:
 
 			// Run update on robots
+			cook.update(dt);
 			
 			// test if we need more clients
 			if (clientlist.size < diff[difficulty].clientMax && Globals.dice.nextFloat() < (1.0f/diff[difficulty].clientFreq))					
@@ -115,7 +129,8 @@ public class GameContext {
 				}
 			}
 			
-			
+			// Run update on the Kitchen
+			restaurant.update(dt);
 			
 			// Receive input
 			
@@ -149,5 +164,8 @@ public class GameContext {
 		return ret;
 	}
 	
-	
+	public void sendCookCommand(int type, int index)
+	{
+		cook.addOrder(type, index);
+	}
 }
