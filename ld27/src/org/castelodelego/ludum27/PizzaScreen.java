@@ -23,10 +23,13 @@ public class PizzaScreen implements Screen, InputProcessor {
 	
 	Vector2 firstTouch;
 	
+	float GO_timer; // Game Over Timer
+	
 	public PizzaScreen()
 	{
 		drender = new DebugRenderer();
 		firstTouch = new Vector2();
+		GO_timer = 3;
 	}
 	
 	
@@ -45,10 +48,18 @@ public class PizzaScreen implements Screen, InputProcessor {
 	
 		// render everything
 		Globals.srender.renderGameScreen(delta);
-		drender.render(Globals.gc);
+		//drender.render(Globals.gc);
 		
 		// test if we need to leave this place
-	
+		if (Globals.gc.getState() == GameState.GAMEOVER)
+		{
+			GO_timer -= delta;
+			if (GO_timer < 0)
+			{
+				GO_timer = 3;
+				GdxGameMain.setScreen(GdxGameMain.SCREEN_MAIN);
+			}
+		}
 	
 	}
 

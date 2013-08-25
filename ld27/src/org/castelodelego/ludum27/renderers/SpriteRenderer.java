@@ -20,10 +20,12 @@ public class SpriteRenderer {
 	Sprite pizzaballoon;
 	Sprite storebackground;
 	Sprite amazingtable;
+	Sprite ovenStatic;
 	
 	Animation bronks_anim;
 	Animation beet_anim;
 	Animation wait_timer;
+	Animation ovenAnimate;
 	
 	Animation4W client[];
 	
@@ -57,10 +59,12 @@ public class SpriteRenderer {
 		
 		storebackground = pack.createSprite("static/store");
 		amazingtable = pack.createSprite("static/table");
+		ovenStatic = pack.createSprite("static/oven");
 		
 		bronks_anim = Globals.animman.get("animations/BronksDOWN");
 		beet_anim = Globals.animman.get("animations/BeetDOWN");
 		wait_timer = Globals.animman.get("animations/timer");
+		ovenAnimate = Globals.animman.get("animations/oven");
 				
 		client = new Animation4W[1];
 		client[0] = new Animation4W("animations/ClientA");
@@ -111,8 +115,8 @@ public class SpriteRenderer {
 			renderIngredient(i,(new Vector2(10,10)).add(Globals.gc.restaurant.getIngredientPosition(i)),2);
 		}
 		
-		// TODO: Rendering Oven
-
+		renderOven();
+		
 		// Rendering Pizza Tray
 		for (int i = 0; i < PizzaPlace.pizzaTraySize; i++) // pizzas on trays
 		{
@@ -137,16 +141,11 @@ public class SpriteRenderer {
 						(new Vector2(22,25)).add(Globals.gc.restaurant.tableLocation.get(i)),0.9f);
 			}
 		}
-
-		// TODO: Pizzas on tables
-
 		
 		// Rendering Robots
 		Globals.batch.draw(bronks_anim.getKeyFrame(Globals.gc.cook.anim_timer),Globals.gc.cook.getpos().x, Globals.gc.cook.getpos().y);
 		Globals.batch.draw(beet_anim.getKeyFrame(Globals.gc.server.anim_timer),Globals.gc.server.getpos().x, Globals.gc.server.getpos().y);
 
-		
-		// TODO: Pizzas on speech balloons
 		
 		// TODO: Rendering speech balloons
 		// TODO: Rendering pizza display
@@ -211,5 +210,20 @@ public class SpriteRenderer {
 		pizzaballoon.setPosition(pos.x, pos.y);
 		pizzaballoon.draw(Globals.batch);
 		renderPizza(p, (new Vector2(7,6)).add(pos), 1);
+	}
+	
+	public void renderOven()
+	{
+
+		if (Globals.gc.restaurant.ovenList.get(0).hasPizza())
+			Globals.batch.draw(ovenAnimate.getKeyFrame(timer), Globals.gc.restaurant.ovenList.get(0).pos.x,Globals.gc.restaurant.ovenList.get(0).pos.y);
+		else
+		{
+			Globals.batch.draw(ovenStatic, Globals.gc.restaurant.ovenList.get(0).pos.x,Globals.gc.restaurant.ovenList.get(0).pos.y);
+			if (Globals.gc.cook.currentPizza.totalIngredients() > 0)
+			{
+				renderPizza(Globals.gc.cook.currentPizza, Globals.gc.restaurant.ovenList.get(0).pos.cpy().add(60,10), 2);
+			}
+		}
 	}
 }

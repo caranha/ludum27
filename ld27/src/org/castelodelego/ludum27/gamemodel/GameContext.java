@@ -49,11 +49,11 @@ public class GameContext {
 		server = new DeliverBot(new Vector2(300,600));
 		
 		diff = new DiffParam[5];
-		diff[0] = new DiffParam(1, 1, 1, 1, 240, 6);
-		diff[1] = new DiffParam(3, 1, 1, 1, 240, 12); // increase variation
-		diff[2] = new DiffParam(3, 1, 1, 2, 200, 24); // 2 at a time
-		diff[3] = new DiffParam(5, 1, 1, 2, 200, 48); // increase variation
-		diff[4] = new DiffParam(5, 1, 2, 2, 150, 72); // increase variation, 2 pizzas at a time
+		diff[0] = new DiffParam(1, 1, 1, 1, 160, 4);
+		diff[1] = new DiffParam(1, 1, 1, 2, 240, 10); // increase variation
+		diff[2] = new DiffParam(4, 1, 1, 2, 160, 20); // 2 at a time
+		diff[3] = new DiffParam(4, 1, 1, 3, 300, 26); // increase variation
+		diff[4] = new DiffParam(8, 1, 1, 4, 300, 72); // increase variation, 2 pizzas at a time
 		
 	}
 	
