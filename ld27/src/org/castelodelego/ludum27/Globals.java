@@ -37,7 +37,7 @@ public class Globals {
 		gc = new GameContext();
 		
 		cam = new OrthographicCamera();
-		cam.setToOrtho(false, Gdx.app.getGraphics().getWidth(),Gdx.app.getGraphics().getHeight());
+		cam.setToOrtho(false, Constants.SCREEN_W, Constants.SCREEN_H);
 		
 		dice = new Random();
 		

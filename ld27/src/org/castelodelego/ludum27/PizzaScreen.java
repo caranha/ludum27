@@ -8,6 +8,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 /**
  * This screen coordinates the input, updates and rendering of the main gameplay screen
@@ -85,21 +86,33 @@ public class PizzaScreen implements Screen, InputProcessor {
 	}
 
 
-
+	public Vector2 unprojectCoordinates(int x, int y)
+	{
+		Vector3 rawtouch = new Vector3(x, y,0);
+		Globals.cam.unproject(rawtouch); 
+		
+		Vector2 ret = new Vector2(rawtouch.x, rawtouch.y);
+		return ret;
+	}
+	
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		screenY = Gdx.app.getGraphics().getHeight() - screenY;
-		firstTouch.set(screenX,screenY);
+
+		Gdx.app.debug("raw touch", screenX + " " + screenY);
+		
+		firstTouch.set(unprojectCoordinates(screenX, screenY));
+		
+		Gdx.app.debug("unprojected Touch", firstTouch.x + " " + firstTouch.y);
+		
 		return true;
 	}
 
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		screenY = Gdx.app.getGraphics().getHeight() - screenY;
+		Vector2 newTouch = unprojectCoordinates(screenX, screenY);
 		
-		Vector2 newTouch = new Vector2(screenX, screenY);
 		int target;
 		
 		// TODO: Test if we are dismissing the "Show Pizza" screen
