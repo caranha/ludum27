@@ -1,6 +1,6 @@
 package org.castelodelego.ludum27;
 
-import org.castelodelego.ludum27.gamemodel.Bronks;
+import org.castelodelego.ludum27.gamemodel.CookBot;
 import org.castelodelego.ludum27.renderers.DebugRenderer;
 
 import com.badlogic.gdx.Gdx;
@@ -108,8 +108,8 @@ public class PizzaScreen implements Screen, InputProcessor {
 		target = Globals.gc.restaurant.getIngredientIndex(firstTouch);
 		if (target != -1 && target == Globals.gc.restaurant.getIngredientIndex(newTouch))
 		{
-			Gdx.app.debug("Interface", "Touched Ingredient "+target);
-			Globals.gc.sendCookCommand(Bronks.ACTION_INGREDIENT, target);
+			Gdx.app.log("Interface", "Touched Ingredient "+target);
+			Globals.gc.sendCookCommand(CookBot.ACTION_INGREDIENT, target);
 			return true;
 		}
 		
@@ -117,16 +117,48 @@ public class PizzaScreen implements Screen, InputProcessor {
 		target = Globals.gc.restaurant.getOvenIndex(firstTouch);
 		if (target != -1 && target == Globals.gc.restaurant.getOvenIndex(newTouch))
 		{
-			Gdx.app.debug("Interface", "Touched Oven "+target);
-			Globals.gc.sendCookCommand(Bronks.ACTION_OVEN, target);
+			Gdx.app.log("Interface", "Touched Oven "+target);
+			Globals.gc.sendCookCommand(CookBot.ACTION_OVEN, target);
 			return true;
 		}
 		
+		// Test if we are touching a pizza array (tap/drag)
+		target = Globals.gc.restaurant.getTrayIndex(firstTouch);
+		if (target != -1 && Globals.gc.restaurant.trayHasPizza(target))
+		{
+			if (Globals.gc.restaurant.getTrayIndex(newTouch) == target) // Tapping the tray
+			{
+				// TODO: show pizza window
+				Gdx.app.log("Interface","Pizza in Tray "+target+": "+Globals.gc.restaurant.getPizzaFromTray(target).infoText());
+				return true;
+			}
+			
+			int table = Globals.gc.restaurant.getTableIndex(newTouch);
+			if (table != -1) // Dragging to a table
+			{
+				if (Globals.gc.restaurant.isTableOccupied(table))
+				{
+					Globals.gc.sendServerCommands(target,table);
+					Gdx.app.log("Interface", "Server Orderd: "+target+","+table);
+					return true;
+				}
+				// TODO: error message/sound: table is empty
+			}
+			
+			// TODO: dragging to the trash
+			
+		}
 		
-		
-		
-		// TODO: Test if we are touching a pizza array (tap/drag)
-		// TODO: Test if we are touching a client
+		// Test if we are touching a client (info)
+		target = Globals.gc.restaurant.getTableIndex(firstTouch);
+		if (target != -1 && Globals.gc.restaurant.getTableIndex(newTouch)==target)
+		{
+			Gdx.app.log("Interface", "Table Touched: "+target);
+			if (Globals.gc.restaurant.isTableOccupied(target))
+			{
+				Gdx.app.log("Interface","Client at table "+target+" wants: "+Globals.gc.restaurant.getClientAtTable(target).pizzaString());
+			}
+		}
 		
 		
 		return false;
@@ -137,7 +169,7 @@ public class PizzaScreen implements Screen, InputProcessor {
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		screenY = Gdx.app.getGraphics().getHeight() - screenY;
 		
-		Gdx.app.log("Dragged", screenX+" "+screenY);
+		//Gdx.app.log("Dragged", screenX+" "+screenY);
 		return true;
 	}
 

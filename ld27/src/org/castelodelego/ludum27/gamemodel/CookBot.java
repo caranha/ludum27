@@ -10,8 +10,9 @@ import com.badlogic.gdx.math.Vector2;
  * @author caranha
  *
  */
-public class Bronks extends Walker{
+public class CookBot extends Walker{
 
+	public final static int COOK_SPEED = 250;
 	public final static int ACTION_INGREDIENT = 0;
 	public final static int ACTION_OVEN = 1;
 	
@@ -20,10 +21,8 @@ public class Bronks extends Walker{
 	int[] lastOrder;
 	float cooldown;
 	
-	public Bronks() {
+	public CookBot() {
 		super(new Vector2());
-		
-		speed = 60;
 		
 		currentPizza = new Pizza();
 		orders = new ArrayList<int[]>();
@@ -41,7 +40,7 @@ public class Bronks extends Walker{
 	public void reset()
 	{
 		clear();
-		speed = 60;
+		speed = COOK_SPEED;
 	}
 	
 	/**
@@ -73,7 +72,7 @@ public class Bronks extends Walker{
 	{
 		if (cooldown > 0)
 		{
-			cooldown -= dt; // TODO: adjust cooldown to perform action animation
+			cooldown -= dt;
 			return;
 		}
 			

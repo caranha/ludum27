@@ -4,6 +4,7 @@ import org.castelodelego.ludum27.DiffParam;
 import org.castelodelego.ludum27.Globals;
 import org.castelodelego.ludum27.gamemodel.Client.ClientState;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -17,15 +18,6 @@ import com.badlogic.gdx.utils.Array;
  *
  */
 public class GameContext {
-	
-	/* Difficulty parameters:
-	 * Max simultaneous clients
-	 * Max different ingredients
-	 * Max repeated ingredients
-	 * Max pizzas
-	 * Client Cooldown divisor // TODO: Balance this. Formula: Chance of a client appearing: 1/n
-	 * Pizzas for next difficulty
-	 */
 	
 	DiffParam[] diff;
 	
@@ -42,8 +34,8 @@ public class GameContext {
 	public Array<Client> clientlist; // Client Info
 	
 	// State objects for robots;
-	Bronks cook;
-	Beet server;
+	CookBot cook;
+	DeliverBot server;
 	
 	
 	/** 
@@ -53,11 +45,15 @@ public class GameContext {
 	{		
 		restaurant = new PizzaPlace();
 		clientlist = new Array<Client>();
-		cook = new Bronks();
-		server = new Beet(new Vector2(300,600));
+		cook = new CookBot();
+		server = new DeliverBot(new Vector2(300,600));
 		
-		diff = new DiffParam[1];
-		diff[0] = new DiffParam(3, 1, 1, 3, 240, 10);
+		diff = new DiffParam[5];
+		diff[0] = new DiffParam(1, 1, 1, 1, 240, 6);
+		diff[1] = new DiffParam(3, 1, 1, 1, 240, 12); // increase variation
+		diff[2] = new DiffParam(3, 1, 1, 2, 200, 24); // 2 at a time
+		diff[3] = new DiffParam(5, 1, 1, 2, 200, 48); // increase variation
+		diff[4] = new DiffParam(5, 1, 2, 2, 150, 72); // increase variation, 2 pizzas at a time
 		
 	}
 	
@@ -75,6 +71,7 @@ public class GameContext {
 		restaurant.reset();
 		clientlist.clear();
 		cook.reset();
+		server.reset();
 	}
 	
 	/**
@@ -86,7 +83,7 @@ public class GameContext {
 		restaurant.clear();
 		clientlist.clear();
 		cook.clear();
-		
+		server.clear();		
 	}
 	
 	public void run()
@@ -110,6 +107,7 @@ public class GameContext {
 
 			// Run update on robots
 			cook.update(dt);
+			server.update(dt);
 			
 			// test if we need more clients
 			if (clientlist.size < diff[difficulty].clientMax && Globals.dice.nextFloat() < (1.0f/diff[difficulty].clientFreq))					
@@ -123,7 +121,10 @@ public class GameContext {
 				else
 				{
 					if (clientlist.get(i).isGameOver())
+					{
+						Gdx.app.debug("GameUpdate", "Game Over! Client "+i+" is too hungry");
 						gs = GameState.GAMEOVER;
+					}
 					if (clientlist.get(i).update(dt))
 						clientlist.removeIndex(i);
 				}
@@ -168,4 +169,28 @@ public class GameContext {
 	{
 		cook.addOrder(type, index);
 	}
+	
+	public void sendServerCommands(int target, int table) {
+		server.setOrder(target, table);
+	}
+
+
+	/** 
+	 * Increases the total of pizzas served this game, and increase difficulty if necessary
+	 * @param i
+	 */
+	public void addPizzaServed(int i) {
+		totalServed +=1;
+		
+		if ((difficulty+1) < diff.length && totalServed > diff[difficulty].nextLvl) // test to increase difficulty
+		{
+			Gdx.app.log("GameContext", "Increased difficulty to "+(difficulty+1)+" after "+totalServed+" pizzas.");
+			difficulty++;
+		}
+	}
+
+	public void addScore(int i) {
+		score += i;		
+	}
+
 }

@@ -15,7 +15,7 @@ public class Oven {
 	public Oven(Vector2 p)
 	{
 		pos = new Vector2(p);
-		maxTimer = 2; // makes pizzas in 2 seconds (TODO: needs balancing)
+		maxTimer = 0.5f; // Time to make pizzas
 	}
 	
 	/**

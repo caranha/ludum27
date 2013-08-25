@@ -60,14 +60,18 @@ public class Client extends Walker{
 			if (!move(dt)) // Table was reached
 			{
 				state = ClientState.WAIT_FOOD;
-				setpos(Globals.gc.restaurant.tableLocation.get(tableGoal));
 			}			
 			break;
 			
 		case WAIT_FOOD:
-			// TODO: Waiting for the food
-			// If Timer runs out, kill the players
-			// Else go to Eating
+			for (int i = 0; i < satisfied.length; i++)
+				if (!satisfied[i]) // at least one pizza is not here yet
+				{
+					waiting_time -= dt;
+					return ret; // UGLY CODE - break only takes me away from the loop. Maybe there is a "double break" somewhere?
+				}
+
+			// all pizzas are here
 			state = ClientState.EATING;
 			break;
 			
@@ -122,6 +126,49 @@ public class Client extends Walker{
 	 */
 	public boolean isGameOver() {		
 		return (waiting_time < 0);
+	}
+
+	/**
+	 * Receives a pizza and tests if it is one of the pizzas the client is waiting for
+	 * @param p a pizza
+	 * @return true if this is a pizza the client is waiting for, false if the client is not waiting for this pizza
+	 */
+	public boolean givePizza(Pizza p) {
+		for (int i = 0; i < order.length; i++)
+		{
+			if (satisfied[i]) // Already have this pizza
+				continue;
+			
+			if (order[i].isEqual(p))
+			{
+				satisfied[i] = true;
+				Gdx.app.log("Client", "Thanks for the correct pizza!");
+				Globals.gc.addPizzaServed(1);
+				
+				// TODO: Add text balloon here
+				Globals.gc.addScore(p.totalIngredients()*order.length);
+				return true;
+			}
+			
+		}
+
+		Gdx.app.log("Client","You gave me a wrong pizza!");
+		// TODO: add text balloon here
+		return false;
+	}
+
+	/**
+	 * Returns a string with all the pizzas that the client wants
+	 * @return
+	 */
+	public String pizzaString() {
+		String ret = "";
+		for (int i = 0; i < order.length; i++)
+		{
+			if (!satisfied[i])
+				ret = ret+order[i].infoText()+" -- ";
+		}
+		return ret;
 	}
 	
 

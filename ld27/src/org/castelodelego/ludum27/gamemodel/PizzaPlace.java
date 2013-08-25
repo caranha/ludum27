@@ -126,11 +126,21 @@ public class PizzaPlace {
 	public int findTraySpace()
 	{
 		for (int i = 0; i < pizzaTraySize; i++)
-			if (pizzaTray[i] == null)
+			if (!(trayHasPizza(i)))
 				return i;
 		return -1;
 	}
 	
+	/**
+	 * Returns true if this tray index has a pizza in it.
+	 */
+	public boolean trayHasPizza(int target) {
+		if (target < pizzaTraySize && pizzaTray[target] != null)
+			return true;
+		
+		return false;
+	}
+
 	
 	
 	/**
@@ -180,9 +190,19 @@ public class PizzaPlace {
 	}
 
 	/**
+	 * Tests if a given table is occupied
+	 * @param table
+	 * @return
+	 */
+	public boolean isTableOccupied(int table)
+	{
+		return (tableOccupied[table] != null);
+	}
+	
+	/**
 	 * Gets the path, for a client, from the front door to the table
 	 * 
-	 * TODO: improve this function and the next one
+	 * TODO: improve client pathing
 	 * 
 	 * @param table
 	 * @return
@@ -227,6 +247,8 @@ public class PizzaPlace {
 			return false;
 	}
 
+	
+	
 	public Collection<? extends Vector2> getCookPath(int[] prevOrder,
 			int[] nextOrder) {
 		ArrayList<Vector2> ret = new ArrayList<Vector2>();
@@ -238,31 +260,87 @@ public class PizzaPlace {
 		return ret;
 	}
 
-	
-	
-	
-	public Vector2 getKitchenPos(int[] lastOrder) {
-		if (lastOrder[0] == Bronks.ACTION_INGREDIENT)
-			return getIngredientPosition(lastOrder[1]);
-		else
-			return getOvenPosition(lastOrder[1]);
+	public Collection<? extends Vector2> getServerPath(int[] prevAction,
+			int[] nextAction) {
+		ArrayList<Vector2> ret = new ArrayList<Vector2>();		
+		// TODO Improve the Route Generation Algorithm
+		// TODO Special case when throwing things into the trash
+		
+		ret.add(getKitchenPos(prevAction));
+		ret.add(getKitchenPos(nextAction));
+		return ret;
 	}
 
-	public Vector2 getIngredientPosition(int i)
+	
+	
+	/** 
+	 * Get the kitchen position that is defined by this 	
+	 * @param robotOrder: first value is an order from a Cook or Server robot, defines the type. Second value is an index;
+	 * @return A vector with the valid kitchen position for the robot to stand, or null.
+	 */
+	public Vector2 getKitchenPos(int[] robotOrder) {
+		switch(robotOrder[0])
+		{
+		case CookBot.ACTION_INGREDIENT:
+			return getIngredientPosition(robotOrder[1]);
+
+		case CookBot.ACTION_OVEN:
+			return getOvenPosition(robotOrder[1]);
+			
+		case DeliverBot.ACTION_GRAB:
+			return getTrayPosition(robotOrder[1]);
+			
+		case DeliverBot.ACTION_SERVE:
+			return getTablePosition(robotOrder[1]);
+			
+		default:
+			Gdx.app.error("getKitchenPos", "Invalid robot Order ID: "+robotOrder[0]+","+robotOrder[1]);
+			return null;
+		}
+	}
+
+
+	/** 
+	 * Get the Ingredient/Oven/Tray/Table position, from a robot's point of view
+	 * @param i the index of the Ingredient/Oven/Tray/Table
+	 * @return null if the index is invalid;
+	 */
+	
+	private Vector2 getIngredientPosition(int i)
 	{
 		if (i < ingredientPosition.size)
 			return ingredientPosition.get(i);
-		else
-			return null;
+		
+		Gdx.app.debug("getIngredientPosition", "Invalid Ingredient Index :"+i);
+		return null;
 	}
 	
-	public Vector2 getOvenPosition(int i)
+	private Vector2 getOvenPosition(int i)
 	{
 		if (i < ovenList.size)
 			return ovenList.get(i).pos;
-		else
-			return null;
+		
+		Gdx.app.debug("getOvenPosition", "Invalid Oven Index :"+i);
+		return null;
 	}
+	
+	private Vector2 getTrayPosition(int i) {
+		if (i < pizzaTraySize)
+			return (new Vector2(pizzaTrayPos.x+(i*TRAY_SIZE[0]),pizzaTrayPos.y));
+		
+		Gdx.app.debug("getTrayPosition", "Invalid Tray Index :"+i);
+		return null;
+	}
+
+	private Vector2 getTablePosition(int i) {
+		if (i < tableLocation.size)
+			return (tableLocation.get(i));
+		
+		Gdx.app.debug("getTablePosition", "Invalid Table Index :"+i);
+		return null;
+	}
+
+	
 
 	/**
 	 * Returns an index to the ingredient that is touched in this position, or -1 if no ingredient is touched in this position.
@@ -300,13 +378,77 @@ public class PizzaPlace {
 	 * @return
 	 */
 	public int getTrayIndex(Vector2 firstTouch) {
-		for (int i = 0; i < ovenList.size; i++)
+		for (int i = 0; i < pizzaTraySize; i++)
 		{
-			Rectangle rect = new Rectangle(pizzaTrayPos.x+TRAY_SIZE[0]*i,pizzaTrayPos.y,TRAY_SIZE[0],TRAY_SIZE[1]);
+			Rectangle rect = new Rectangle(pizzaTrayPos.x+(TRAY_SIZE[0]*i),pizzaTrayPos.y,TRAY_SIZE[0],TRAY_SIZE[1]);
 			if (rect.contains(firstTouch))
 				return i;
 		}
 		return -1;
 	}
+
+	/** 
+	 * Returns an index to the table that is touched in this position, or -1 if no table is touched in this position
+	 * @param newTouch
+	 * @return
+	 */
+	public int getTableIndex(Vector2 touch) {
+		for (int i = 0; i < tableLocation.size; i++)
+		{
+			Rectangle rect = new Rectangle(tableLocation.get(i).x,tableLocation.get(i).y, TABLE_SIZE[0], TABLE_SIZE[1]);
+			if (rect.contains(touch))
+				return i;
+		}
+		return -1;
+	}
+
+
+	/**
+	 * Removes a Pizza from the tray and returns it.
+	 * @param i
+	 * @return
+	 */
+	public Pizza removePizzaFromTray(int i) {
+		if (i < pizzaTraySize)
+		{
+			Pizza ret = pizzaTray[i];
+			pizzaTray[i] = null;
+			return ret;
+		}
+		
+		Gdx.app.error("Restaurant.RemoveFromTray","Invalid index "+i);
+		return null;
+	}
+	
+	/**
+	 * Gets a pizza from the tray without removing it.
+	 * @param i
+	 * @return
+	 */
+	public Pizza getPizzaFromTray(int i) {
+		if (i < pizzaTraySize)
+			return pizzaTray[i];
+		
+		Gdx.app.error("Restaurant.RemoveFromTray","Invalid index "+i);
+		return null;
+	}
+	
+	
+	
+
+	public Client getClientAtTable(int i) {
+		if (i > tableOccupied.length)
+		{
+			Gdx.app.error("getClientAtTable","invalid index "+i);
+			return null;
+		}
+		return tableOccupied[i];
+	}
+
+
+
+
+
+
 	
 }

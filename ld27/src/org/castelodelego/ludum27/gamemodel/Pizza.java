@@ -20,7 +20,6 @@ public class Pizza {
 	
 	public int[] ingredients;
 	
-	// FIXME: Create Pizza Class
 	public Pizza()
 	{
 		ingredients = new int[SIZE];
@@ -85,5 +84,15 @@ public class Pizza {
 	{
 		for (int i = 0; i < SIZE; i++)
 			ingredients[i] = p.ingredients[i];
+	}
+
+	/**
+	 * @return a text string with infor about all the ingredients in this pizza
+	 */
+	public String infoText() {
+		String ret = "";
+		for (int i = 0; i < SIZE; i++)
+			ret += "I"+i+":"+ingredients[i]+" ";
+		return ret;
 	}
 }
