@@ -58,7 +58,7 @@ public class DeliverBot extends Walker {
 		orders.clear();
 		actions.clear();
 
-		setpos(Globals.gc.restaurant.getKitchenPos(lastAction));
+		setpos(Globals.gc.restaurant.getTrayPosition(0).cpy().add(10,-50));
 	}
 
 	

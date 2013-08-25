@@ -21,14 +21,14 @@ public class GameContext {
 	
 	DiffParam[] diff;
 	
-	enum GameState { PREPARING, RUNNING, BREAK, GAMEOVER };
+	public enum GameState { PREPARING, RUNNING, BREAK, GAMEOVER, PAUSED };
 	
 	
 	int score; // score for this game session
 	int totalServed;
 	
 	int difficulty; // used to calculate level progression parameters.
-	GameState gs;
+	public GameState gs;
 	
 	public PizzaPlace restaurant; // Restaurant Info
 	public Array<Client> clientlist; // Client Info
@@ -84,12 +84,10 @@ public class GameContext {
 		clientlist.clear();
 		cook.clear();
 		server.clear();		
+		Globals.srender.reset();
 	}
 	
-	public void run()
-	{
-		gs = GameState.RUNNING;
-	}
+
 	
 	/**
 	 * Updates the game state
@@ -136,6 +134,8 @@ public class GameContext {
 			// Receive input
 			
 			break;
+		case PAUSED:
+			break;
 			
 		case BREAK:
 			// Shoptime. Wait for click to leave this state, 
@@ -143,15 +143,6 @@ public class GameContext {
 		}
 	}
 	
-	/**
-	 * Returns true if the game is over
-	 * @return
-	 */
-	public GameState getState()
-	{
-		return gs;
-	}
-
 	/**
 	 * Used for debug rendering
 	 * @return
@@ -193,4 +184,14 @@ public class GameContext {
 		score += i;		
 	}
 
+	public void setState(GameState state)
+	{
+		gs = state;
+	}
+	
+	public GameState getState()
+	{
+		return gs;
+	}
+	
 }

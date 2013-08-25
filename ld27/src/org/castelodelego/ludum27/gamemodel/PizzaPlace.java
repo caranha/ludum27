@@ -205,16 +205,25 @@ public class PizzaPlace {
 	/**
 	 * Gets the path, for a client, from the front door to the table
 	 * 
-	 * TODO: improve client pathing
-	 * 
 	 * @param table
 	 * @return
 	 */
+	
+	
 	public ArrayList<Vector2> getClientPathToTable(int table) {
+		
 
 		ArrayList<Vector2> ret = new ArrayList<Vector2>();
-		ret.add(entrance.cpy());
-		ret.add(tableLocation.get(table).cpy());		
+		
+		ret.add(entrance.cpy().add(10,-40));
+		
+		if (table > 2) // tables 3, 4, 5
+			ret.add(new Vector2(entrance.x+10,370));
+		else
+			ret.add(new Vector2(entrance.x+10,240));
+
+		ret.add(tableLocation.get(table).cpy().add(10, 60));
+		ret.add(tableLocation.get(table).cpy().add(10, 20));		
 		return ret;
 	}
 	
@@ -225,8 +234,15 @@ public class PizzaPlace {
 	 */
 	public ArrayList<Vector2> getClientPathFromTable(int table) {
 		ArrayList<Vector2> ret = new ArrayList<Vector2>();
-		ret.add(tableLocation.get(table).cpy());
-		ret.add(entrance.cpy());		
+		
+		ret.add(tableLocation.get(table).cpy().add(10, 60));		
+		if (table > 2) // tables 3, 4, 5
+			ret.add(new Vector2(entrance.x+40,370));
+		else
+			ret.add(new Vector2(entrance.x+40,240));		
+				
+		ret.add(entrance.cpy().add(40,-100));
+		
 		return ret;
 	}
 
@@ -255,10 +271,45 @@ public class PizzaPlace {
 	public Collection<? extends Vector2> getCookPath(int[] prevOrder,
 			int[] nextOrder) {
 		ArrayList<Vector2> ret = new ArrayList<Vector2>();
-		// TODO Improve the Route generation Algorithm
 		
-		ret.add(getKitchenPos(prevOrder));
-		ret.add(getKitchenPos(nextOrder));
+		if ((prevOrder[0] == nextOrder[0]) && prevOrder[1] < 4 && nextOrder[1] < 4) 
+		{
+			ret.add(getKitchenPos(nextOrder).cpy().add(65, 0)); // Both on the Left side, go straight to Ingredient
+			return ret;
+		}
+		
+		if ((prevOrder[0] == nextOrder[0]) && prevOrder[1] > 3 && nextOrder[1] > 3) 
+		{
+			ret.add(getKitchenPos(nextOrder).cpy().add(-45, 0)); // Both on the Left side, go straight to Ingredient
+			return ret;
+		}
+		
+		// Crossing: Add origin mid-point
+		if ((prevOrder[0] == CookBot.ACTION_INGREDIENT) && prevOrder[1] < 4 )
+			ret.add(getIngredientPosition(3).cpy().add(85,0));
+		
+		if ((prevOrder[0] == CookBot.ACTION_INGREDIENT) && prevOrder[1] > 3 )
+			ret.add(getIngredientPosition(7).cpy().add(-65,0));
+		
+		// Add End Points
+		
+		if ((nextOrder[0] == CookBot.ACTION_OVEN))
+		{
+			ret.add(getOvenPosition(0).cpy().add(60,-70));
+			return ret;
+		}
+		
+		// Ingredient Orders
+		if ((nextOrder[1]) < 4)
+		{
+			ret.add(getIngredientPosition(3).cpy().add(85,0));
+			ret.add(getKitchenPos(nextOrder).cpy().add(65, 0));
+		}
+		else
+		{
+			ret.add(getIngredientPosition(7).cpy().add(-65,0));
+			ret.add(getKitchenPos(nextOrder).cpy().add(-45, 0));
+		}
 		
 		return ret;
 	}
@@ -266,11 +317,43 @@ public class PizzaPlace {
 	public Collection<? extends Vector2> getServerPath(int[] prevAction,
 			int[] nextAction) {
 		ArrayList<Vector2> ret = new ArrayList<Vector2>();		
-		// TODO Improve the Route Generation Algorithm
-		// TODO Special case when throwing things into the trash
 		
-		ret.add(getKitchenPos(prevAction));
-		ret.add(getKitchenPos(nextAction));
+		// First deal with the cases where change lane is not necessary
+		if (prevAction[0] == nextAction[0] && prevAction[0] == DeliverBot.ACTION_GRAB)
+		{
+			ret.add(getTrayPosition(nextAction[1]).cpy().add(10, -50));
+			return ret;
+		}
+		
+		if (prevAction[0] == nextAction[0] && ((prevAction[1] < 3 && nextAction[1] < 3) || (prevAction[1] > 2 && nextAction[1] > 2)))
+		{
+			ret.add(getTablePosition(nextAction[1]).cpy().add(10, -50));
+			return ret;
+		}
+		
+		// Origin Checkpoint
+		if (prevAction[0] == DeliverBot.ACTION_GRAB)
+			ret.add(getTrayPosition(0).cpy().add(-10, -70));
+		else
+		{
+			int table = (prevAction[1] < 3?0:3);
+			ret.add(getTablePosition(table).cpy().add(-80, -70));
+		}
+
+		// Destination Checkpoint
+		if (nextAction[0] == DeliverBot.ACTION_GRAB)
+			ret.add(getTrayPosition(0).cpy().add(-10, -70));
+		else
+		{
+			int table = (nextAction[1] < 3?0:3);
+			ret.add(getTablePosition(table).cpy().add(-80, -70));
+		}
+		
+		// Destination
+		ret.add(getKitchenPos(nextAction).cpy().add(10,-50));
+		
+//		ret.add(getKitchenPos(prevAction));
+//		ret.add(getKitchenPos(nextAction));
 		return ret;
 	}
 

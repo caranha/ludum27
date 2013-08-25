@@ -1,6 +1,7 @@
 package org.castelodelego.ludum27;
 
 import org.castelodelego.ludum27.gamemodel.CookBot;
+import org.castelodelego.ludum27.gamemodel.GameContext.GameState;
 import org.castelodelego.ludum27.renderers.DebugRenderer;
 
 import com.badlogic.gdx.Gdx;
@@ -60,8 +61,9 @@ public class PizzaScreen implements Screen, InputProcessor {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(this); // Can I call this for every screen?
-		Globals.srender.reset();
-		Globals.gc.run();
+		// TODO: Add a countdown for starting the game
+		if (Globals.gc.getState() == GameState.PREPARING)
+			Globals.gc.setState(GameState.RUNNING); 
 		
 	}
 
@@ -73,14 +75,13 @@ public class PizzaScreen implements Screen, InputProcessor {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
+		Globals.gc.setState(GameState.PAUSED);
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
+		if (Globals.gc.getState()==GameState.PAUSED)
+			Globals.gc.setState(GameState.RUNNING);
 	}
 
 	@Override

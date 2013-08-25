@@ -14,7 +14,7 @@ public class Client extends Walker{
 	private int tableGoal;
 	
 	
-	private Pizza[] order;
+	public Pizza[] order;
 	private boolean[] satisfied;
 	public float waiting_time = 10; // THEME! 10 SECONDS! WOW!
 	private float eating_time = 3;
@@ -114,7 +114,7 @@ public class Client extends Walker{
 		
 		state = ClientState.GO_SEAT;
 		tableGoal = table;
-		setpos(Globals.gc.restaurant.entrance);
+		setpos(new Vector2(Globals.dice.nextInt(200),-60));
 		Globals.gc.restaurant.sitAtTable(table,this);
 
 

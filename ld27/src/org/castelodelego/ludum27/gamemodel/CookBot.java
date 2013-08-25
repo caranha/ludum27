@@ -51,7 +51,7 @@ public class CookBot extends Walker{
 		currentPizza.clear();
 		lastOrder[0] = ACTION_OVEN;
 		lastOrder[1] = 0;
-		setpos(Globals.gc.restaurant.getKitchenPos(lastOrder));		
+		setpos(Globals.gc.restaurant.getOvenPosition(0).cpy().add(60,-70));		
 		cooldown = 0;
 	}
 
@@ -83,7 +83,6 @@ public class CookBot extends Walker{
 		{
 			lastOrder = orders.get(0);
 			orders.remove(0); // clear the current order;
-			setpos(Globals.gc.restaurant.getKitchenPos(lastOrder));
 			
 			switch(lastOrder[0])
 			{

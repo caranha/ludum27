@@ -2,6 +2,7 @@ package org.castelodelego.ludum27.renderers;
 
 import org.castelodelego.ludum27.Globals;
 import org.castelodelego.ludum27.gamemodel.Client;
+import org.castelodelego.ludum27.gamemodel.Client.ClientState;
 import org.castelodelego.ludum27.gamemodel.Pizza;
 import org.castelodelego.ludum27.gamemodel.PizzaPlace;
 
@@ -129,6 +130,12 @@ public class SpriteRenderer {
 		for (int i = 0; i < Globals.gc.restaurant.tableLocation.size; i++)
 		{
 			Globals.batch.draw(amazingtable, Globals.gc.restaurant.tableLocation.get(i).x, Globals.gc.restaurant.tableLocation.get(i).y);
+			if ((Globals.gc.restaurant.getClientAtTable(i) != null) &&
+				(Globals.gc.restaurant.getClientAtTable(i).state == ClientState.EATING))
+			{ // drawing a pizza in the table
+				renderPizza(Globals.gc.restaurant.getClientAtTable(i).order[0], 
+						(new Vector2(22,25)).add(Globals.gc.restaurant.tableLocation.get(i)),0.9f);
+			}
 		}
 
 		// TODO: Pizzas on tables
