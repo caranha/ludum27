@@ -29,9 +29,9 @@ public class DebugRenderer {
 	public void RenderMover (Walker m[])
 	{
 		linedrawer.begin(ShapeType.Line);
-		linedrawer.setColor(Color.GREEN);
+		linedrawer.setColor(Color.RED);
 		for(int i = 0; i < m.length; i++)
-			linedrawer.rect(m[i].getpos().x, m[i].getpos().y, 40, 40);
+			linedrawer.rect(m[i].getpos().x, m[i].getpos().y, 40, 60);
 		linedrawer.end();
 	}
 	

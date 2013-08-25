@@ -29,7 +29,7 @@ public class GdxGameMain extends Game {
 	static boolean changescreen;
 	
 	// Debug text display
-	BitmapFont debugtext;
+	
 	
 	
 	@Override
@@ -37,7 +37,7 @@ public class GdxGameMain extends Game {
 
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		
-		debugtext = new BitmapFont();
+		
 
 		Globals.init();
 		
@@ -63,7 +63,6 @@ public class GdxGameMain extends Game {
 
 	@Override
 	public void dispose() {
-		debugtext.dispose();
 		super.dispose();
 	}
 
@@ -86,8 +85,8 @@ public class GdxGameMain extends Game {
 		// Good for rendering debug info
 		// TODO: Test if we are in debug mode
 		Globals.batch.begin();
-		debugtext.setColor(Color.YELLOW);
-		debugtext.draw(Globals.batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 795);		
+		Globals.debugtext.setColor(Color.YELLOW);
+		Globals.debugtext.draw(Globals.batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 795);		
 		Globals.batch.end();
 		
 	}

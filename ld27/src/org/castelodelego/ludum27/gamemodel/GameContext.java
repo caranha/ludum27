@@ -34,8 +34,8 @@ public class GameContext {
 	public Array<Client> clientlist; // Client Info
 	
 	// State objects for robots;
-	CookBot cook;
-	DeliverBot server;
+	public CookBot cook;
+	public DeliverBot server;
 	
 	
 	/** 

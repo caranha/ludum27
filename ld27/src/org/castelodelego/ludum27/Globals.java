@@ -8,6 +8,7 @@ import org.castelodelego.ludum27.renderers.SpriteRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
@@ -19,6 +20,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class Globals {
 		
+	final static public int client_anims = 1;
+	
 	public static AssetManager manager;
 	public static AnimationManager animman;
 	public static SpriteBatch batch;
@@ -27,11 +30,15 @@ public class Globals {
 	public static Random dice;
 	public static SpriteRenderer srender;
 	
+	public static BitmapFont debugtext;
+	
 	public static int maxscore; // maximum score so far in this session;
 	
 	
 	static void init()
 	{
+		debugtext = new BitmapFont();
+		
 		batch = new SpriteBatch();
 		animman = new AnimationManager();
 		manager = new AssetManager();

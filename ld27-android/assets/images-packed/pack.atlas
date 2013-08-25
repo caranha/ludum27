@@ -66,3 +66,249 @@ pizza/tomato
   orig: 20, 20
   offset: 0, 0
   index: -1
+
+pack2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+balloons/pizzaballoon
+  rotate: false
+  xy: 2, 2
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+
+pack3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+static/store
+  rotate: false
+  xy: 2, 64
+  size: 480, 800
+  orig: 480, 800
+  offset: 0, 0
+  index: -1
+static/table
+  rotate: false
+  xy: 2, 2
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+
+pack4.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+animations/BeetDOWN
+  rotate: false
+  xy: 2, 64
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 1
+animations/BeetDOWN
+  rotate: false
+  xy: 2, 2
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 2
+animations/BeetDOWN
+  rotate: false
+  xy: 44, 64
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 3
+animations/BeetDOWN
+  rotate: false
+  xy: 44, 2
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 4
+animations/BronksDOWN
+  rotate: false
+  xy: 86, 64
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 1
+animations/BronksDOWN
+  rotate: false
+  xy: 86, 2
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 2
+animations/BronksDOWN
+  rotate: false
+  xy: 128, 64
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 3
+animations/BronksDOWN
+  rotate: false
+  xy: 128, 2
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 4
+animations/ClientADOWN
+  rotate: false
+  xy: 170, 64
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 1
+animations/ClientADOWN
+  rotate: false
+  xy: 170, 64
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 3
+animations/ClientADOWN
+  rotate: false
+  xy: 170, 2
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 2
+animations/ClientADOWN
+  rotate: false
+  xy: 212, 64
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 4
+animations/ClientALEFT
+  rotate: false
+  xy: 212, 2
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 1
+animations/ClientALEFT
+  rotate: false
+  xy: 254, 64
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 2
+animations/ClientALEFT
+  rotate: false
+  xy: 254, 2
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 3
+animations/ClientALEFT
+  rotate: false
+  xy: 296, 64
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 4
+animations/ClientARIGHT
+  rotate: false
+  xy: 296, 2
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 1
+animations/ClientARIGHT
+  rotate: false
+  xy: 338, 64
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 2
+animations/ClientARIGHT
+  rotate: false
+  xy: 338, 2
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 3
+animations/ClientARIGHT
+  rotate: false
+  xy: 380, 64
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 4
+animations/ClientAUP
+  rotate: false
+  xy: 380, 2
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 1
+animations/ClientAUP
+  rotate: false
+  xy: 422, 64
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 2
+animations/ClientAUP
+  rotate: false
+  xy: 422, 2
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 3
+animations/ClientAUP
+  rotate: false
+  xy: 464, 64
+  size: 40, 60
+  orig: 40, 60
+  offset: 0, 0
+  index: 4
+animations/timer
+  rotate: false
+  xy: 464, 42
+  size: 40, 20
+  orig: 40, 20
+  offset: 0, 0
+  index: 1
+animations/timer
+  rotate: false
+  xy: 506, 104
+  size: 40, 20
+  orig: 40, 20
+  offset: 0, 0
+  index: 2
+animations/timer
+  rotate: false
+  xy: 464, 20
+  size: 40, 20
+  orig: 40, 20
+  offset: 0, 0
+  index: 3
+animations/timer
+  rotate: false
+  xy: 506, 82
+  size: 40, 20
+  orig: 40, 20
+  offset: 0, 0
+  index: 4
+animations/timer
+  rotate: false
+  xy: 548, 104
+  size: 40, 20
+  orig: 40, 20
+  offset: 0, 0
+  index: 5
+animations/timer
+  rotate: false
+  xy: 506, 60
+  size: 40, 20
+  orig: 40, 20
+  offset: 0, 0
+  index: 6

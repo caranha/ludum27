@@ -21,7 +21,7 @@ public class PizzaPlace {
 
 	public static final int[] INGREDIENT_SIZE = { 60,60 };
 	public static final int[] TABLE_SIZE = { 60,60 };
-	public static final int[] OVEN_SIZE = { 60,100 };
+	public static final int[] OVEN_SIZE = { 160, 120 };
 	public static final int[] TRAY_SIZE = { 60,60 };
 	
 	public Vector2 entrance; // location where the clients enter
@@ -45,35 +45,38 @@ public class PizzaPlace {
 	 */
 	public PizzaPlace()
 	{
-		entrance = new Vector2(20,80);
+		entrance = new Vector2(40,60);
 		
 		// TABLE LOCATIONS
+		
 		tableLocation = new Array<Vector2>();
-		tableLocation.add(new Vector2(150,150));
-		tableLocation.add(new Vector2(250,150));
-		tableLocation.add(new Vector2(350,150));
-		tableLocation.add(new Vector2(150,250));
-		tableLocation.add(new Vector2(250,250));
-		tableLocation.add(new Vector2(350,250));
+		tableLocation.add(new Vector2(170,170));
+		tableLocation.add(new Vector2(270,170));
+		tableLocation.add(new Vector2(370,170));
+		
+		tableLocation.add(new Vector2(170,300));
+		tableLocation.add(new Vector2(270,300));
+		tableLocation.add(new Vector2(370,300));
 		tableOccupied = new Client[tableLocation.size];
 		
 		// INGREDIENT LOCATIONS
 		ingredientPosition = new Array<Vector2>();
+
 		ingredientPosition.add(new Vector2(20,720));
-		ingredientPosition.add(new Vector2(80,720));
-		ingredientPosition.add(new Vector2(140,720));
-		ingredientPosition.add(new Vector2(200,720));
-		ingredientPosition.add(new Vector2(20,640));
-		ingredientPosition.add(new Vector2(80,640));
-		ingredientPosition.add(new Vector2(140,640));
-		ingredientPosition.add(new Vector2(200,640));
+		ingredientPosition.add(new Vector2(20,660));
+		ingredientPosition.add(new Vector2(20,600));
+		ingredientPosition.add(new Vector2(20,540));
+		
+		ingredientPosition.add(new Vector2(400,720));
+		ingredientPosition.add(new Vector2(400,660));		
+		ingredientPosition.add(new Vector2(400,600));
+		ingredientPosition.add(new Vector2(400,540));
 
 		// OVEN LOCATIONS
 		ovenList = new Array<Oven>();
-		ovenList.add(new Oven(new Vector2(400,680)));
 		
 		pizzaTray = new Pizza[pizzaTraySize]; // it starts all null;
-		pizzaTrayPos = new Vector2(100,460);
+		pizzaTrayPos = new Vector2(90,460);
 		
 		reset();
 	}
@@ -85,7 +88,7 @@ public class PizzaPlace {
 		
 		clear();
 		ovenList.clear();
-		ovenList.add(new Oven(new Vector2(400,680)));
+		ovenList.add(new Oven(new Vector2(160,660)));
 	}
 	
 	/**

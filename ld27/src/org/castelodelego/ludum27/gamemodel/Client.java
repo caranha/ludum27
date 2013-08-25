@@ -4,10 +4,11 @@ import org.castelodelego.ludum27.Globals;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class Client extends Walker{
 
-	enum ClientState { IN_LINE, GO_SEAT, WAIT_FOOD, EATING, GO_LEAVE };
+	public enum ClientState { IN_LINE, GO_SEAT, WAIT_FOOD, EATING, GO_LEAVE };
 	
 	public ClientState state;
 	private int tableGoal;
@@ -15,7 +16,7 @@ public class Client extends Walker{
 	
 	private Pizza[] order;
 	private boolean[] satisfied;
-	private float waiting_time = 10; // THEME! 10 SECONDS! WOW!
+	public float waiting_time = 10; // THEME! 10 SECONDS! WOW!
 	private float eating_time = 3;
 	
 	public Client(int variety, int quantity, int pizzaN) {
@@ -36,7 +37,7 @@ public class Client extends Walker{
 			satisfied[i] = false;
 		}		
 		
-		this.sprite_tag = ""; // TODO: Select random client sprite;
+		animation = Globals.dice.nextInt(Globals.client_anims);
 	}
 	
 	/**
@@ -171,5 +172,13 @@ public class Client extends Walker{
 		return ret;
 	}
 	
+	public Array<Pizza> getDesires()
+	{
+		Array<Pizza> ret = new Array<Pizza>();
+		for (int i = 0; i < satisfied.length; i++)
+			if (!satisfied[i])
+				ret.add(order[i]);
+		return ret;
+	}
 
 }

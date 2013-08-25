@@ -11,7 +11,10 @@ public class Walker {
 	Vector2 dir;
 	float speed = 20;
 	float size = 20;
-	String sprite_tag;
+	
+	public int animation;
+	
+	public float anim_timer;
 	
 	private ArrayList<Vector2> move_goals;
 	
@@ -21,6 +24,7 @@ public class Walker {
 		this.pos = pos.cpy();
 		this.dir = new Vector2();
 		move_goals = new ArrayList<Vector2>();
+		anim_timer = 0;
 	}
 	
 	public void resetGoals()
@@ -38,6 +42,7 @@ public class Walker {
 	 */
 	public boolean move(float dt)
 	{
+		anim_timer+=dt;
 		// no goals, no move
 		if (move_goals.isEmpty())
 			return false;
@@ -68,6 +73,11 @@ public class Walker {
 	public Vector2 getpos()
 	{
 		return pos;
+	}
+	
+	public Vector2 getdir()
+	{
+		return dir;
 	}
 	
 }

@@ -33,11 +33,26 @@ public class AnimationManager extends HashMap<String,Animation>{
 	 */
 	public boolean loadAnimations(TextureAtlas pack, float dt)
 	{
+		float time;
+		int loop;
 		Array<AtlasRegion> a = pack.getRegions();
 		for(int i = 0; i < a.size; i++)
 			if (a.get(i).index == 1)
 			{
-				this.put(a.get(i).name, new Animation(0.05f,pack.createSprites(a.get(i).name),Animation.LOOP));
+				time = 0.05f;
+				loop = Animation.LOOP;
+				
+				if (a.get(i).name.compareTo("animations/timer") == 0)
+				{
+					time = 2f;
+					loop = Animation.NORMAL;
+				}
+				if (a.get(i).name.contains("animations/ClientA"))
+				{
+					time = 0.1f;
+				}				
+				
+				this.put(a.get(i).name, new Animation(time,pack.createSprites(a.get(i).name),loop));
 			}
 		return true;
 	}	
