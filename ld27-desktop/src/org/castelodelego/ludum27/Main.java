@@ -7,7 +7,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "ld27";
+		cfg.title = "LD27 - Samurai Cafe";
 		cfg.useGL20 = true;
 		cfg.width = Constants.SCREEN_W;
 		cfg.height = Constants.SCREEN_H;

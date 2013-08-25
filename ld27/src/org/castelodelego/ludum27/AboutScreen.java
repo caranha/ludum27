@@ -5,28 +5,17 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
-public class MainScreen implements Screen, GestureListener {
+public class AboutScreen implements Screen, GestureListener {
 
-	Rectangle[] touchAreas;
-	
-	public MainScreen()
-	{
-		touchAreas = new Rectangle[3];
-		touchAreas[0] = new Rectangle(75, 410, 270, 60);
-		touchAreas[1] = new Rectangle(170, 305, 270, 60);
-		touchAreas[2] = new Rectangle(60, 200, 270, 60);
-	}
 	
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0.2f, 0.6f, 0.3f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		Globals.srender.renderMainScreen(delta);
+		Globals.srender.renderAboutScreen(delta);
 		
 		//Globals.drender.RenderRectangles(touchAreas);
 		
@@ -68,42 +57,13 @@ public class MainScreen implements Screen, GestureListener {
 
 	}
 
-	public Vector2 unprojectCoordinates(float x, float y)
-	{
-		Vector3 rawtouch = new Vector3(x, y,0);
-		Globals.cam.unproject(rawtouch); 
-		
-		Vector2 ret = new Vector2(rawtouch.x, rawtouch.y);
-		return ret;
-	}
 	
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
 		Globals.gc.reset();
 		
-		Vector2 firstTouch = unprojectCoordinates(x, y);
-		
-		if (touchAreas[0].contains(firstTouch))	
-		{
-			GdxGameMain.setScreen(GdxGameMain.SCREEN_PLAY);
-			Globals.gc.reset();
-			return true;
-		}
-		
-		if (touchAreas[1].contains(firstTouch))	
-		{
-			GdxGameMain.setScreen(GdxGameMain.SCREEN_HELP);
-			return true;
-		}
-		
-		if (touchAreas[2].contains(firstTouch))	
-		{
-			GdxGameMain.setScreen(GdxGameMain.SCREEN_ABOUT);
-			return true;
-		}
-		
-		
-		return false;
+		GdxGameMain.setScreen(GdxGameMain.SCREEN_MAIN);
+		return true;
 	}
 	
 	@Override

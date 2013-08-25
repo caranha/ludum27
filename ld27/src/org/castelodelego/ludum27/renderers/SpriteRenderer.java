@@ -19,6 +19,9 @@ public class SpriteRenderer {
 	Sprite[] pizza;
 	Sprite pizzaballoon;
 	Sprite storebackground;
+	Sprite aboutbackground;
+	Sprite helpbackground;
+	Sprite gameOverbackground;
 	Sprite amazingtable;
 	Sprite ovenStatic;
 	
@@ -27,9 +30,12 @@ public class SpriteRenderer {
 	Animation wait_timer;
 	Animation ovenAnimate;
 	
+	Animation mainbackground;
+	
 	Animation4W client[];
 	
 	float timer;
+	int switcher;
 	
 	public SpriteRenderer()
 	{
@@ -42,6 +48,8 @@ public class SpriteRenderer {
 	public boolean init(TextureAtlas pack, float dt)
 	{
 		timer = 0;
+		switcher = 0;
+		
 		pizza = new Sprite[9];
 		
 		pizza[0] = pack.createSprite("pizza/pizza");
@@ -58,6 +66,10 @@ public class SpriteRenderer {
 		pizzaballoon = pack.createSprite("balloons/pizzaballoon");
 		
 		storebackground = pack.createSprite("static/store");
+		aboutbackground = pack.createSprite("static/about");
+		helpbackground = pack.createSprite("static/help");
+		gameOverbackground = pack.createSprite("static/gameover");
+		
 		amazingtable = pack.createSprite("static/table");
 		ovenStatic = pack.createSprite("static/oven");
 		
@@ -65,9 +77,13 @@ public class SpriteRenderer {
 		beet_anim = Globals.animman.get("animations/BeetDOWN");
 		wait_timer = Globals.animman.get("animations/timer");
 		ovenAnimate = Globals.animman.get("animations/oven");
+		
+		mainbackground = Globals.animman.get("animations/main");
 				
-		client = new Animation4W[1];
+		client = new Animation4W[3];
 		client[0] = new Animation4W("animations/ClientA");
+		client[1] = new Animation4W("animations/ClientB");
+		client[2] = new Animation4W("animations/ClientC");
 		
 		return true;
 	}
@@ -82,22 +98,41 @@ public class SpriteRenderer {
 		timer += dt;
 		
 		Globals.batch.begin();
-		Globals.debugtext.setColor(Color.YELLOW);
-		Globals.debugtext.draw(Globals.batch, "Samurai Pizza", 100, 700);
-		Globals.debugtext.draw(Globals.batch, "Your pizza in 10 seconds, or we commit Seppuku!",100,680);
 		
-		Globals.debugtext.draw(Globals.batch, "0- click on ingredients to add them to the pizza", 100, 640);
-		Globals.debugtext.draw(Globals.batch, "1- click on the owen to finalize a pizza", 100, 620);
-		Globals.debugtext.draw(Globals.batch, "2- drag a ready pizza to the client to deliver", 100, 600);
-		Globals.debugtext.draw(Globals.batch, "3- Hope it is the right pizza!!!",100,580);
+		if (Globals.dice.nextFloat() > 0.03)
+			Globals.batch.draw(mainbackground.getKeyFrame(0), 0,0);
+		else
+			Globals.batch.draw(mainbackground.getKeyFrame(0.7f), 0,0);
 		
-		Globals.debugtext.draw(Globals.batch, "Remember, don't let the clients wait more than 10 seconds!",100,500);
+		Globals.debugtext.setColor(Color.BLACK);
+		Globals.batch.draw(bronks_anim.getKeyFrame(timer), 80, 260);
+		Globals.batch.draw(beet_anim.getKeyFrame(timer), 360, 360);
 		
-		Globals.batch.draw(bronks_anim.getKeyFrame(timer), 150, 400);
-		Globals.batch.draw(beet_anim.getKeyFrame(timer), 300, 400);
-		
-		Globals.debugtext.draw(Globals.batch, "Click Anywhere to Begin!", 100, 300);		
+		Globals.debugtext.draw(Globals.batch, Globals.maxscore+"", 330, 60);		
 		Globals.batch.end();
+		
+	}
+	
+	public void renderAboutScreen(float delta) {
+		Globals.batch.begin();
+		//Rendering background
+		aboutbackground.draw(Globals.batch);
+		Globals.batch.end();
+	}
+	
+
+	public void renderHelpScreen(float delta) {
+		Globals.batch.begin();
+		//Rendering background
+		helpbackground.draw(Globals.batch);
+		Globals.batch.end();		
+	}
+	
+	public void renderGameOverScreen(float delta) {
+		Globals.batch.begin();
+		//Rendering background
+		gameOverbackground.draw(Globals.batch);
+		Globals.batch.end();		
 		
 	}
 	
@@ -201,7 +236,7 @@ public class SpriteRenderer {
 				renderPizzaBalloon(tmp.get(i), (new Vector2(40,40)).add(c.getpos()));
 			}
 			
-			Globals.batch.draw(wait_timer.getKeyFrame(10 - c.waiting_time), c.getpos().x, c.getpos().y+60);
+			Globals.batch.draw(wait_timer.getKeyFrame(11f - c.waiting_time), c.getpos().x, c.getpos().y+60);
 		}
 	}
 	
@@ -226,4 +261,9 @@ public class SpriteRenderer {
 			}
 		}
 	}
+
+	
+
+
+	
 }

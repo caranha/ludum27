@@ -6,6 +6,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,13 +14,14 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class GdxGameMain extends Game {
 
-	static int SCREEN_NUMBER = 5;
+	static int SCREEN_NUMBER = 6;
 	
 	static int SCREEN_SPLASH = 0;
 	static int SCREEN_MAIN = 1;
 	static int SCREEN_PLAY = 2;
 	static int SCREEN_GAMEOVER = 3;
-	static int SCREEN_BREAK = 4;
+	static int SCREEN_ABOUT = 4;
+	static int SCREEN_HELP = 5;
 	
 	static Screen[] screenlist;
 
@@ -35,7 +37,7 @@ public class GdxGameMain extends Game {
 	@Override
 	public void create() {		
 
-		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		Gdx.app.setLogLevel(Application.LOG_NONE);
 		
 		
 
@@ -51,7 +53,8 @@ public class GdxGameMain extends Game {
 		screenlist[SCREEN_MAIN] = new MainScreen();
 		screenlist[SCREEN_PLAY] = new PizzaScreen();
 		screenlist[SCREEN_GAMEOVER] = new GameOverScreen();
-		screenlist[SCREEN_BREAK] = new BreakScreen();
+		screenlist[SCREEN_ABOUT] = new AboutScreen();
+		screenlist[SCREEN_HELP] = new HelpScreen();
 		
 		
 		setScreen(screenlist[SCREEN_SPLASH]);
@@ -80,14 +83,17 @@ public class GdxGameMain extends Game {
 		
 		super.render();
 		
+		if (this.getScreen()!=screenlist[SCREEN_SPLASH])
+			Globals.updateMusic();
 		
 		// Rendering here renders above everything else
 		// Good for rendering debug info
-		// TODO: Test if we are in debug mode
-		Globals.batch.begin();
-		Globals.debugtext.setColor(Color.YELLOW);
-		Globals.debugtext.draw(Globals.batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 795);		
-		Globals.batch.end();
+		
+		// Uncomment for FPS
+		//		Globals.batch.begin();
+		//		Globals.debugtext.setColor(Color.YELLOW);
+		//		Globals.debugtext.draw(Globals.batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 795);		
+		//		Globals.batch.end();
 		
 	}
 
@@ -99,6 +105,9 @@ public class GdxGameMain extends Game {
 	private void queueAssets()
 	{
 		Globals.manager.load("images-packed/pack.atlas", TextureAtlas.class); // packed images
+		
+		Globals.manager.load("music/autotracker1.ogg", Music.class);
+		Globals.manager.load("music/autotracker2.ogg", Music.class);
 	}
 	
 	/**

@@ -9,6 +9,9 @@ import com.badlogic.gdx.utils.Array;
 public class Client extends Walker{
 
 	public enum ClientState { IN_LINE, GO_SEAT, WAIT_FOOD, EATING, GO_LEAVE };
+
+	static float[] speedClient = { 55, 70, 90};
+	
 	
 	public ClientState state;
 	private int tableGoal;
@@ -29,7 +32,7 @@ public class Client extends Walker{
 		state = ClientState.IN_LINE;
 
 		tableGoal = -1;
-		speed = 40;
+
 		
 		for(int i = 0; i < npizza; i++)
 		{
@@ -38,6 +41,7 @@ public class Client extends Walker{
 		}		
 		
 		animation = Globals.dice.nextInt(Globals.client_anims);
+		speed = speedClient[animation];
 	}
 	
 	/**

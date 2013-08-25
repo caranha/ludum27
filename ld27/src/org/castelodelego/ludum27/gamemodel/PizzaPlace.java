@@ -105,6 +105,8 @@ public class PizzaPlace {
 			ovenList.get(i).clear();
 		
 		// Clear pizza tray
+		for (int i = 0; i < pizzaTraySize; i++)
+			pizzaTray[i] = null;
 		
 		
 	}

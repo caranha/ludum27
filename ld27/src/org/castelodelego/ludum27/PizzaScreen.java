@@ -56,8 +56,9 @@ public class PizzaScreen implements Screen, InputProcessor {
 			GO_timer -= delta;
 			if (GO_timer < 0)
 			{
+				Globals.setMaxScore(Globals.gc.getScore());
 				GO_timer = 3;
-				GdxGameMain.setScreen(GdxGameMain.SCREEN_MAIN);
+				GdxGameMain.setScreen(GdxGameMain.SCREEN_GAMEOVER);
 			}
 		}
 	

@@ -7,6 +7,7 @@ import org.castelodelego.ludum27.gamemodel.Walker;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.Color;
 
@@ -86,6 +87,17 @@ public class DebugRenderer {
 	public void RenderSmallPizza(int[] pizza, Vector2 position)
 	{
 		
+	}
+	
+	public void RenderRectangles(Rectangle[] rects)
+	{
+		linedrawer.begin(ShapeType.Line);
+		linedrawer.setColor(Color.RED);
+		for (int i = 0; i < rects.length; i++)
+		{
+			linedrawer.rect(rects[i].x, rects[i].y, rects[i].width, rects[i].height);
+		}
+		linedrawer.end();
 	}
 	
 }
