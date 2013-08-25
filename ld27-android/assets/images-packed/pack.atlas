@@ -1,0 +1,68 @@
+
+pack.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+pizza/cheese
+  rotate: false
+  xy: 2, 2
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+pizza/eggs
+  rotate: false
+  xy: 24, 2
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+pizza/olive
+  rotate: false
+  xy: 46, 2
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+pizza/onion
+  rotate: false
+  xy: 68, 2
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+pizza/pizza
+  rotate: false
+  xy: 90, 2
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+pizza/sausage
+  rotate: false
+  xy: 112, 2
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+pizza/screw
+  rotate: false
+  xy: 134, 2
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+pizza/star
+  rotate: false
+  xy: 156, 2
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+pizza/tomato
+  rotate: false
+  xy: 178, 2
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1

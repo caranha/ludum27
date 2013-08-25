@@ -3,6 +3,7 @@ package org.castelodelego.ludum27;
 import java.util.Random;
 
 import org.castelodelego.ludum27.gamemodel.GameContext;
+import org.castelodelego.ludum27.renderers.SpriteRenderer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -24,6 +25,7 @@ public class Globals {
 	public static GameContext gc;
 	public static OrthographicCamera cam;
 	public static Random dice;
+	public static SpriteRenderer srender;
 	
 	public static int maxscore; // maximum score so far in this session;
 	
@@ -33,6 +35,7 @@ public class Globals {
 		batch = new SpriteBatch();
 		animman = new AnimationManager();
 		manager = new AssetManager();
+		srender = new SpriteRenderer();
 		
 		gc = new GameContext();
 		

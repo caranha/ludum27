@@ -301,12 +301,12 @@ public class PizzaPlace {
 
 
 	/** 
-	 * Get the Ingredient/Oven/Tray/Table position, from a robot's point of view
+	 * Get the Ingredient/Oven/Tray/Table position, based on their indexes
 	 * @param i the index of the Ingredient/Oven/Tray/Table
 	 * @return null if the index is invalid;
 	 */
 	
-	private Vector2 getIngredientPosition(int i)
+	public Vector2 getIngredientPosition(int i)
 	{
 		if (i < ingredientPosition.size)
 			return ingredientPosition.get(i);
@@ -315,7 +315,7 @@ public class PizzaPlace {
 		return null;
 	}
 	
-	private Vector2 getOvenPosition(int i)
+	public Vector2 getOvenPosition(int i)
 	{
 		if (i < ovenList.size)
 			return ovenList.get(i).pos;
@@ -324,7 +324,7 @@ public class PizzaPlace {
 		return null;
 	}
 	
-	private Vector2 getTrayPosition(int i) {
+	public Vector2 getTrayPosition(int i) {
 		if (i < pizzaTraySize)
 			return (new Vector2(pizzaTrayPos.x+(i*TRAY_SIZE[0]),pizzaTrayPos.y));
 		
@@ -332,7 +332,7 @@ public class PizzaPlace {
 		return null;
 	}
 
-	private Vector2 getTablePosition(int i) {
+	public Vector2 getTablePosition(int i) {
 		if (i < tableLocation.size)
 			return (tableLocation.get(i));
 		

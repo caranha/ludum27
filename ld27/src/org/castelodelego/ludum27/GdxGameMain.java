@@ -9,6 +9,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class GdxGameMain extends Game {
 
@@ -98,7 +99,7 @@ public class GdxGameMain extends Game {
 	 */
 	private void queueAssets()
 	{
-		// manager.load("images-packed/pack.atlas", TextureAtlas.class); // packed images
+		Globals.manager.load("images-packed/pack.atlas", TextureAtlas.class); // packed images
 	}
 	
 	/**

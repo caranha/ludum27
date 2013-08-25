@@ -18,6 +18,8 @@ import com.badlogic.gdx.math.Vector3;
 public class PizzaScreen implements Screen, InputProcessor {
 
 	DebugRenderer drender;
+	
+	
 	Vector2 firstTouch;
 	
 	public PizzaScreen()
@@ -41,6 +43,7 @@ public class PizzaScreen implements Screen, InputProcessor {
 		Globals.gc.update(delta);
 	
 		// render everything
+		Globals.srender.renderGameScreen(delta);
 		drender.render(Globals.gc);
 		
 		// test if we need to leave this place

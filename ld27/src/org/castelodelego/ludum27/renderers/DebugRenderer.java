@@ -73,8 +73,6 @@ public class DebugRenderer {
 		{
 			linedrawer.setColor(Color.ORANGE);
 			linedrawer.rect(p.pizzaTrayPos.x+(PizzaPlace.TRAY_SIZE[0]*i), p.pizzaTrayPos.y, PizzaPlace.TRAY_SIZE[0], PizzaPlace.TRAY_SIZE[1]);
-			if (p.pizzaTray[i] != null)
-				linedrawer.circle(p.pizzaTrayPos.x+(PizzaPlace.TRAY_SIZE[0]*i)+PizzaPlace.TRAY_SIZE[0]/2, p.pizzaTrayPos.y+PizzaPlace.TRAY_SIZE[1]/2, 10);
 		}
 		
 		

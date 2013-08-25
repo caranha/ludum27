@@ -5,3 +5,7 @@
 *.jar
 *.war
 *.ear
+
+# binaries
+ld27-android/bin/*
+ld27-desktop/bin/*

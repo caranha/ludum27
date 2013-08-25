@@ -59,8 +59,8 @@ public class SplashScreen implements Screen {
 		// load animations
 		if (loaddone == true && loadAnimDone == false)
 		{	
-			loadAnimDone = true;
-			//loadAnimDone = GdxGameMain.animman.loadAnimations(GdxGameMain.manager.get("images-packed/pack.atlas", TextureAtlas.class));
+			loadAnimDone = (Globals.animman.loadAnimations(Globals.manager.get("images-packed/pack.atlas", TextureAtlas.class),delta) &&
+							Globals.srender.init(Globals.manager.get("images-packed/pack.atlas", TextureAtlas.class), delta));
 		}
 		
 		// splash screen fade crontrol

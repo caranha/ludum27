@@ -29,8 +29,9 @@ public class AnimationManager extends HashMap<String,Animation>{
 	 * Returns true when it finishes loading.
 	 * 
 	 * FIXME: Derive the length of the animation and the loop type from the filename
+	 * @param dt 
 	 */
-	public boolean loadAnimations(TextureAtlas pack)
+	public boolean loadAnimations(TextureAtlas pack, float dt)
 	{
 		Array<AtlasRegion> a = pack.getRegions();
 		for(int i = 0; i < a.size; i++)
