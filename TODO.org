@@ -1,0 +1,22 @@
+* Improve the difficulty curve
+  - [ ] Decrease the "wait time" when there are no clients in or entering the shop
+  - [ ] Increase the difficulty curve so that multiple clients come sooner
+  - [ ] Make "multiple ingredients in pizza" condition come sooner
+  - [ ] Create a "harder difficulty" button
+
+* Improve the input and feedback
+  - [ ] Dragging the pizza to the table should have visual feedback
+        - Pizza should appear under mouse cursor during drag
+        - Selected table during drag should be highlighted
+  - [ ] Score should be visible on Play screen and Game over screen
+  - [ ] Make different doppings more visually unique
+
+* Game improvements
+  - [ ] Increase the variety of regular clients
+  - [ ] Add "Easter Egg" clients:
+        - [ ] Eastern warrior
+        - [ ] Pixel adventurer
+        - [ ] Others.
+  - [ ] Add html link to ludum dare and my blog
+
+* Submit to play store once the above checks are done
