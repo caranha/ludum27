@@ -25,15 +25,30 @@ public class Pizza {
 		ingredients = new int[SIZE];
 	}
 	
-	public Pizza(int variety, int quantity)
+	/**
+	 * Makes a random pizza with the requested number of DIFFERENT ingredients
+	 * 
+	 * FIXME: This tends to get loopy if the variety is too close to the total number of ingredients. Change pizza to use "SETS" instead?
+	 */
+	public Pizza(int variety)
 	{
 		ingredients = new int[SIZE];
-		for (int i = 0; i < variety; i++)
+		if (variety > 8)
 		{
-			ingredients[Globals.dice.nextInt(SIZE)]+= Globals.dice.nextInt(quantity);			
+			Gdx.app.error("Invalid Code Parameter", "Tried to generate a random pizza with variety above possible. Creating an empty pizza instead.");
+			return;
 		}
-		if (totalIngredients() == 0)
-			ingredients[Globals.dice.nextInt(SIZE)]+= 1; // at least one ingredient
+
+		// picks random ingredients until the variety is exhausted.
+		while (variety > 0)
+		{
+			int nextingredient = Globals.dice.nextInt(SIZE);
+			if (ingredients[nextingredient] == 0)
+			{
+				ingredients[nextingredient]++;
+				variety --;
+			}
+		}
 	}
 	
 	public boolean isEqual(Pizza p)

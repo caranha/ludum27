@@ -1,22 +1,58 @@
-* Improve the difficulty curve
-  - [ ] Decrease the "wait time" when there are no clients in or entering the shop
-  - [ ] Increase the difficulty curve so that multiple clients come sooner
-  - [ ] Make "multiple ingredients in pizza" condition come sooner
-  - [ ] Create a "harder difficulty" button
+* Issues for this revision
+** Improve Gameplay screen
+- [ ] Include current score over oven
+- [ ] Include "Trash" (destroys pizzas in waiting)
+- [ ] Visual feedback for dragging the pizza: 
+  - [ ] Selected pizza is highlighted
+  - [ ] Hovering over table highlights table
+  - [ ] An arrow links the pizza and the table
+- [ ] Make different toppings visually unique (shape, color, position)
+- [ ] Bigger visualization on client's pizza on a tap
 
-* Improve the input and feedback
-  - [ ] Dragging the pizza to the table should have visual feedback
-        - Pizza should appear under mouse cursor during drag
-        - Selected table during drag should be highlighted
-  - [ ] Score should be visible on Play screen and Game over screen
-  - [ ] Make different doppings more visually unique
+** Improve Game over screen
+- [ ] Show the final score and the best score on the game over screen
+- [ ] Death animation on the game over screen
+- [ ] Different music on the game over screen
+- [ ] Fades to/from the game over screen
 
-* Game improvements
-  - [ ] Increase the variety of regular clients
-  - [ ] Add "Easter Egg" clients:
-        - [ ] Eastern warrior
-        - [ ] Pixel adventurer
-        - [ ] Others.
-  - [ ] Add html link to ludum dare and my blog
+** Polish improvements
+- [ ] Fix the NORTH walk of the fat client
+- [ ] Fade from initial screen to the Gameplay Screen
+- [ ] Sound Effects
+  - Robots walking
+  - Client Eating
+  - "Irasshai"
+  - Pizza Cooking
+  - Button clicking
+- [ ] Thought Balloons
+  - Irasshai
+  - Thank you!
+  - Wrong Pizza!
+- [ ] "Ding" on level up
 
-* Submit to play store once the above checks are done
+** New Features
+- [ ] Multiple difficulty curves, selectable at start
+  - Maybe just Change what difficulty the game starts at
+- [ ] Easter egg clients
+  - Characters from "maze explorers"
+  - Ninja turtle
+- [ ] HTML/Intent link to Ludum Dare, My Blog Page
+
+** DONE Re-balance Game difficulty
+- [X] Guarantee that shop will never be empty
+- [X] Test that clients with multiple pizza tastes are happening
+  correctly
+- [X] Change the "client creation algorithm" not to use MTTH anymore.
+- [X] New difficulty curve:
+  - Always 1 client
+  - (after 2 pizzas): sometimes 2 clients
+  - (after 5 pizzas): always 2 clients
+  - (after 10 pizzas): sometimes 3 clients
+  - (after 20 pizzas): some clients with 2 pizza flavors
+  - (After 40 pizzas): always 3 clients.
+
+* Issues for the next revision
+- [ ] Balance the difficulty curve further
+- [ ] Write "adaptative" difficulty curve: It calculates how well you
+  are doing to increase/decrease difficulty
+- [ ] Client Types have certain preferences (allows players to foretell what pizza they need)

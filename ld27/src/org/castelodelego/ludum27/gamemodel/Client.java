@@ -1,5 +1,6 @@
 package org.castelodelego.ludum27.gamemodel;
 
+import org.castelodelego.ludum27.DiffParam;
 import org.castelodelego.ludum27.Globals;
 
 import com.badlogic.gdx.Gdx;
@@ -22,23 +23,32 @@ public class Client extends Walker{
 	public float waiting_time = 10; // THEME! 10 SECONDS! WOW!
 	private float eating_time = 3;
 	
-	public Client(int variety, int quantity, int pizzaN) {
-		super(new Vector2(0,0));
-
-		int npizza = Globals.dice.nextInt(pizzaN)+1; // generates 1 to pizzaN pizzas;
-				
-		order = new Pizza[npizza];
-		satisfied = new boolean[npizza];
+	/**
+	 * This client constructor takes a difficulty parameter to make the pizza
+	 * 
+	 * It will create ONE pizza with the number of flavors indicated by the difficulty (1, 2 or 3) 
+	 * 
+	 */
+	public Client(DiffParam diff) {
+		super(new Vector2(0,-100));
+		
+		int flavors = 1;
+		if (Globals.dice.nextFloat() < diff.chance_two)
+		{
+			flavors++;
+			if (Globals.dice.nextFloat() < diff.chance_three)
+				flavors++;
+		}
+		
+		order = new Pizza[1];
+		satisfied = new boolean[1];
 		state = ClientState.IN_LINE;
 
 		tableGoal = -1;
 
 		
-		for(int i = 0; i < npizza; i++)
-		{
-			order[i] = new Pizza(variety, quantity);
-			satisfied[i] = false;
-		}		
+		order[0] = new Pizza(flavors);
+		satisfied[0] = false;
 		
 		animation = Globals.dice.nextInt(Globals.client_anims);
 		speed = speedClient[animation];

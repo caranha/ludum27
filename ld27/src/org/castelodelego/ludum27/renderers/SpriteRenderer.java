@@ -6,7 +6,6 @@ import org.castelodelego.ludum27.gamemodel.Client.ClientState;
 import org.castelodelego.ludum27.gamemodel.Pizza;
 import org.castelodelego.ludum27.gamemodel.PizzaPlace;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;

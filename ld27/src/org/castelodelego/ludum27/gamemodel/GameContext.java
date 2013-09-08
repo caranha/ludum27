@@ -37,24 +37,34 @@ public class GameContext {
 	public CookBot cook;
 	public DeliverBot server;
 	
+	// Extra Client timer
+	float extra_timer; 
+	
 	
 	/** 
 	 * New game context should only need to be called once 
 	 */
 	public GameContext()
 	{		
+		extra_timer = 0;
 		restaurant = new PizzaPlace();
 		clientlist = new Array<Client>();
 		cook = new CookBot();
 		server = new DeliverBot(new Vector2(300,600));
 		
-		diff = new DiffParam[5];
-		diff[0] = new DiffParam(1, 1, 1, 1, 60, 3);
-		diff[1] = new DiffParam(1, 1, 1, 2, 120, 9); 
-		diff[2] = new DiffParam(4, 1, 1, 3, 180, 15); 
-		diff[3] = new DiffParam(6, 1, 1, 3, 120, 25); 
-		diff[4] = new DiffParam(6, 1, 1, 5, 60, 72); 
+		diff = new DiffParam[8];
+		// Minimum Clients, Maximum Clients, Time to extra client, chance of second pizza flavor, chance of third piza flavor, level up score
 		
+		
+		diff[0] = new DiffParam(1, 1, 0, 0, 0, 2);
+		diff[1] = new DiffParam(1, 2, 7, 0, 0, 7); 
+		diff[2] = new DiffParam(2, 2, 0, 0, 0, 15);
+		diff[3] = new DiffParam(2, 3, 5, 0, 0, 25);
+		diff[3] = new DiffParam(1, 2, 7, 1f, 0, 29);
+		diff[4] = new DiffParam(2, 3, 10, 0.2f, 0, 40);
+		diff[5] = new DiffParam(2, 3, 5, 0.2f, 0.1f, 55);
+		diff[6] = new DiffParam(2, 3, 5, 0.4f, 0.4f, 70);
+		diff[6] = new DiffParam(3, 4, 5, 0.2f, 0.0f, 90);
 	}
 	
 	/**
@@ -62,6 +72,7 @@ public class GameContext {
 	 */
 	public void reset()
 	{
+		extra_timer = 0;
 		score = 0;
 		totalServed = 0;
 		
@@ -107,10 +118,6 @@ public class GameContext {
 			cook.update(dt);
 			server.update(dt);
 			
-			// test if we need more clients
-			if (clientlist.size < diff[difficulty].clientMax && Globals.dice.nextFloat() < (1.0f/diff[difficulty].clientFreq))					
-				clientlist.add(new Client(diff[difficulty].variety,diff[difficulty].quantity,diff[difficulty].pizzaN));
-			
 			// Run update on clients
 			for(int i = 0; i < clientlist.size; i++)
 			{
@@ -127,6 +134,36 @@ public class GameContext {
 						clientlist.removeIndex(i);
 				}
 			}
+
+			
+			//** TEST FOR MORE CLIENTS **//
+			
+			// calculating the current number of "dangerous" clients
+			// TODO: I can probably roll this loop into the previous loop. 
+			// But since the client list is so small, it probably won't matter.
+			int nclients = 0;
+			for (int i = 0; i < clientlist.size; i++)
+				if (clientlist.get(i).state == ClientState.GO_SEAT || clientlist.get(i).state == ClientState.WAIT_FOOD)
+					nclients++;
+			
+			// Guaranteeing the minimum number of clients
+			if (nclients < diff[difficulty].client_min)
+				{
+					clientlist.add(new Client(diff[difficulty]));
+					nclients++;
+				}	
+			
+			// testing for extra clients
+			if (nclients >= diff[difficulty].client_min && nclients < diff[difficulty].client_max)
+			{
+				extra_timer += dt;
+				if (extra_timer + Globals.dice.nextFloat() > diff[difficulty].extra_client)
+				{	
+					clientlist.add(new Client(diff[difficulty]));
+					extra_timer = 0;
+				}
+			}
+
 			
 			// Run update on the Kitchen
 			restaurant.update(dt);
@@ -173,7 +210,7 @@ public class GameContext {
 	public void addPizzaServed(int i) {
 		totalServed +=1;
 		
-		if ((difficulty+1) < diff.length && totalServed > diff[difficulty].nextLvl) // test to increase difficulty
+		if ((difficulty+1) < diff.length && totalServed >= diff[difficulty].nextLvl) // test to increase difficulty
 		{
 			Gdx.app.log("GameContext", "Increased difficulty to "+(difficulty+1)+" after "+totalServed+" pizzas.");
 			difficulty++;
