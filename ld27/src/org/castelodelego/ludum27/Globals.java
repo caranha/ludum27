@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.castelodelego.ludum27.gamemodel.GameContext;
 import org.castelodelego.ludum27.renderers.DebugRenderer;
+import org.castelodelego.ludum27.renderers.PrimitiveRenderer;
 import org.castelodelego.ludum27.renderers.SpriteRenderer;
 
 import com.badlogic.gdx.Gdx;
@@ -33,8 +34,10 @@ public class Globals {
 	public static GameContext gc;
 	public static OrthographicCamera cam;
 	public static Random dice;
+	
 	public static SpriteRenderer srender;
 	public static DebugRenderer drender;
+	public static PrimitiveRenderer prender;
 	
 	public static BitmapFont debugtext;
 	
@@ -53,8 +56,10 @@ public class Globals {
 		batch = new SpriteBatch();
 		animman = new AnimationManager();
 		manager = new AssetManager();
+		
 		srender = new SpriteRenderer();
 		drender = new DebugRenderer();
+		prender = new PrimitiveRenderer();
 		
 		gc = new GameContext();
 		

@@ -33,12 +33,16 @@ public class SpriteRenderer {
 	
 	Animation4W client[];
 	
+	int dragTrayIndex;
+	Vector2 dragTrayPos;
+	
+	
 	float timer;
 	int switcher;
 	
 	public SpriteRenderer()
 	{
-		
+		dragTrayPos = new Vector2();
 	}
 	
 	/**
@@ -89,6 +93,7 @@ public class SpriteRenderer {
 	
 	public void reset()
 	{
+		dragTrayIndex = -1;
 		timer = 0;
 	}
 
@@ -180,6 +185,8 @@ public class SpriteRenderer {
 		Globals.batch.draw(bronks_anim.getKeyFrame(Globals.gc.cook.anim_timer),Globals.gc.cook.getpos().x, Globals.gc.cook.getpos().y);
 		Globals.batch.draw(beet_anim.getKeyFrame(Globals.gc.server.anim_timer),Globals.gc.server.getpos().x, Globals.gc.server.getpos().y);
 
+		// Rendering dragged Pizza
+		renderDragPizza(); // Pizza in drag!
 		
 		// TODO: Rendering speech balloons
 		// TODO: Rendering pizza display
@@ -262,7 +269,22 @@ public class SpriteRenderer {
 	}
 
 	
-
-
+	public void renderDragPizza()
+	{
+		if (dragTrayIndex != -1)
+		{
+			renderPizza(Globals.gc.restaurant.getPizzaFromTray(dragTrayIndex),dragTrayPos.cpy().sub(pizza[0].getWidth()/2,pizza[0].getHeight()/2),1);
+		}
+	}
+	
+	public void setDragPizza(int index)
+	{
+		dragTrayIndex = index;
+	}
+	
+	public void setDragPos(Vector2 pos)
+	{
+		dragTrayPos.set(pos);
+	}
 	
 }

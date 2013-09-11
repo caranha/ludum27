@@ -83,6 +83,9 @@ public class GameContext {
 		clientlist.clear();
 		cook.reset();
 		server.reset();
+		
+		Globals.srender.reset();
+		Globals.prender.reset();
 	}
 	
 	/**
@@ -96,6 +99,7 @@ public class GameContext {
 		cook.clear();
 		server.clear();		
 		Globals.srender.reset();
+		Globals.prender.reset();
 	}
 	
 
@@ -197,9 +201,29 @@ public class GameContext {
 	{
 		cook.addOrder(type, index);
 	}
-	
+
+	/**
+	 * Tests a delivery order for validity, and then send it to the server.
+	 * 
+	 * @param target
+	 * @param table
+	 */
 	public void sendServerCommands(int target, int table) {
-		server.setOrder(target, table);
+
+		if (this.restaurant.trayHasPizza(target) && // tray position has pizza
+				restaurant.getClientAtTable(table) != null && // tray position has a client
+				restaurant.getClientAtTable(table).state == ClientState.WAIT_FOOD) // client is waiting for a pizza
+		{
+			server.setOrder(target, table);
+		}
+		else
+		{
+			Gdx.app.debug("GameContext", "Received invalid server order. Discarding");
+			// TODO: Play sound for invalid action (buzzer)
+		}
+
+		
+
 	}
 
 

@@ -1,12 +1,12 @@
 * Issues for this revision
 ** Improve Gameplay screen
+- [X] Visual feedback for dragging the pizza: 
+  - [X] Selected pizza is highlighted
+  - [X] Hovering over table highlights table
+  - [X] An arrow links the pizza and the table
+- [ ] Make different toppings visually unique (shape, color, position)
 - [ ] Include current score over oven
 - [ ] Include "Trash" (destroys pizzas in waiting)
-- [ ] Visual feedback for dragging the pizza: 
-  - [ ] Selected pizza is highlighted
-  - [ ] Hovering over table highlights table
-  - [ ] An arrow links the pizza and the table
-- [ ] Make different toppings visually unique (shape, color, position)
 - [ ] Bigger visualization on client's pizza on a tap
 
 ** Improve Game over screen

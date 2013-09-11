@@ -421,7 +421,7 @@ public class PizzaPlace {
 	}
 
 	public Vector2 getTablePosition(int i) {
-		if (i < tableLocation.size)
+		if (i < tableLocation.size && i >= 0)
 			return (tableLocation.get(i));
 		
 		Gdx.app.debug("getTablePosition", "Invalid Table Index :"+i);
@@ -523,13 +523,20 @@ public class PizzaPlace {
 	
 	
 	
-
+	/**
+	 * Returns a pointer to the Client associated with table i.
+	 * This pointer will be null if no client is associated with that table.
+	 * 
+	 * @param i
+	 * @return
+	 */
 	public Client getClientAtTable(int i) {
-		if (i > tableOccupied.length)
+		if (i > tableOccupied.length || i < 0)
 		{
-			Gdx.app.error("getClientAtTable","invalid index "+i);
+			Gdx.app.debug("getClientAtTable","invalid index "+i);
 			return null;
 		}
+		
 		return tableOccupied[i];
 	}
 

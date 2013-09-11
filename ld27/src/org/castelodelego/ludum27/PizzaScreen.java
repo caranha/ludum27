@@ -49,6 +49,7 @@ public class PizzaScreen implements Screen, InputProcessor {
 		// render everything
 		Globals.srender.renderGameScreen(delta);
 		//drender.render(Globals.gc);
+		Globals.prender.renderPizzaScreen();
 		
 		// test if we need to leave this place
 		if (Globals.gc.getState() == GameState.GAMEOVER)
@@ -122,6 +123,15 @@ public class PizzaScreen implements Screen, InputProcessor {
 		
 		Gdx.app.debug("unprojected Touch", firstTouch.x + " " + firstTouch.y);
 		
+		// Test if we are touching a pizza. If so, set the pizza dragger:		
+		int target = Globals.gc.restaurant.getTrayIndex(firstTouch);
+		if (target != -1 && Globals.gc.restaurant.trayHasPizza(target))
+		{
+			Globals.srender.setDragPizza(target);
+			Globals.srender.setDragPos(firstTouch);
+			Globals.prender.setTrayPos(Globals.gc.restaurant.getTrayPosition(target));
+		}
+			
 		return true;
 	}
 
@@ -131,6 +141,13 @@ public class PizzaScreen implements Screen, InputProcessor {
 		Vector2 newTouch = unprojectCoordinates(screenX, screenY);
 		
 		int target;
+		
+		// Dismiss the "Pizza Dragger"
+		Globals.srender.setDragPizza(-1);
+		// Dismiss the "dragging guides"
+		Globals.prender.setTablepos(null);
+		Globals.prender.setTrayPos(null);
+		
 		
 		// TODO: Test if we are dismissing the "Show Pizza" screen
 		
@@ -197,9 +214,15 @@ public class PizzaScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		screenY = Gdx.app.getGraphics().getHeight() - screenY;
 		
-		//Gdx.app.log("Dragged", screenX+" "+screenY);
+		Vector2 dragpos = unprojectCoordinates(screenX, screenY);
+		
+		
+		Globals.srender.setDragPos(dragpos);
+		
+		// Setting the drag rectangle
+		Globals.prender.setTablepos(Globals.gc.restaurant.getTablePosition(Globals.gc.restaurant.getTableIndex(dragpos)));
+		
 		return true;
 	}
 

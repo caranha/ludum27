@@ -3,6 +3,7 @@ package org.castelodelego.ludum27.gamemodel;
 import java.util.ArrayList;
 
 import org.castelodelego.ludum27.Globals;
+import org.castelodelego.ludum27.gamemodel.Client.ClientState;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -116,14 +117,20 @@ public class DeliverBot extends Walker {
 					break;
 				case ACTION_SERVE:
 					Pizza p = heldPizza.remove(0);
-					if (lastAction[1] == -1) // throwing pizza in the trash
-						break;
-					
 					Client c = Globals.gc.restaurant.getClientAtTable(lastAction[1]);
+					
+					if (lastAction[1] == -1 || c == null) // throwing pizza in the trash OR no one at table
+					{
+						// TODO: Pizza in Trash sound effect;
+						// TODO: Trash balloon;
+						break;
+					}			
+					
 					if (!c.givePizza(p)) // gives pizza to the client, returns false if the pizza was wrong
 					{
 						cooldown = 0.5f; 
-						Gdx.app.log("Beet", "I'm sorry, I got the wrong pizza!");// TODO: Add "I'm sorry" Balloon, Balance I'm sorry timer
+						Gdx.app.log("Beet", "I'm sorry, I got the wrong pizza!");
+						// TODO: I'm Sorry sound effect, I'm sorry balloon
 					}
 					break;
 				default:
@@ -142,11 +149,12 @@ public class DeliverBot extends Walker {
 	 * @param pizza
 	 * @param client
 	 */
-	public void setOrder(int pizzaID, int clientID)
+	public void setOrder(int trayIndex, int tableIndex)
 	{
 		int[] order = new int[2];
-		order[0] = pizzaID;
-		order[1] = clientID;
+		order[0] = trayIndex;
+		order[1] = tableIndex;		
+		
 		orders.add(order);
 	}
 	
